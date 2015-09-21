@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">JXTHelp</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="drawer_close">close</string>
+    <string name="draweropen">open</string>
+    <string-array name="tab_array">
+        <item>新闻</item>
+        <item>课表</item>
+        <item>考试</item>
+    </string-array>
 </resources>
