@@ -38,7 +38,7 @@ public class DrawerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.drawer_left_list,null);
         listView= (ListView) view.findViewById(R.id.drawer_list);
-        drawerAdapter=new DrawerAdapter(this.getActivity().getApplication(),list);
+        drawerAdapter=new DrawerAdapter(App.getContext(),list);
         listView.setAdapter(drawerAdapter);
         return view;
 
