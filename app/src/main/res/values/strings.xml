@@ -9,4 +9,7 @@
         <item>课表</item>
         <item>考试</item>
     </string-array>
+    <string name="login">登入</string>
+    <string name="user">用户名 :</string>
+    <string name="password">密 码 :</string>
 </resources>

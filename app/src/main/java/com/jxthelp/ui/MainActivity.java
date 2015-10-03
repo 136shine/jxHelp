@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import com.jxthelp.fragment.DrawerFragment;
 import com.jxthelp.fragment.FragmentKC;
 import com.jxthelp.fragment.FragmentNews;
 import com.jxthelp.fragment.FragmentTest;
+import com.jxthelp.util.ToastUtils;
 
 public class MainActivity extends BaseActivity {
     private DrawerActionBar drawerActionBar;
@@ -29,6 +31,8 @@ public class MainActivity extends BaseActivity {
     private ImageView imageView;
     private TextView textView;
     private boolean isFirst=true;
+    //long
+    private long mExitTime;
 
 
     @Override
@@ -107,6 +111,21 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK) {
+            //防止按一次退出
+            if (System.currentTimeMillis() - mExitTime >2000) {
+                ToastUtils.showShort("在按一次回到桌面");
+                mExitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

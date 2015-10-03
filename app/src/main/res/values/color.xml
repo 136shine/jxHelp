@@ -2,4 +2,5 @@
 <resources>
     <color name="drawer_text">#ffb74bff</color>
     <color name="tab_text">#686968</color>
+    <color name="login_text">#a25dff</color>
 </resources>
