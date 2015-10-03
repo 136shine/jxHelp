@@ -26,7 +26,6 @@ public class HttpUtils {
     }
 
     public static String getHttp(String url, DefaultHttpClient defaultHttpClient, String setHeader) throws IOException {
-        url=new String(url.getBytes("iso8859-1"),"gb2312");
         HttpGet request = new HttpGet(url);
         request.setHeader("Referer", setHeader);
         HttpResponse response = defaultHttpClient.execute(request);

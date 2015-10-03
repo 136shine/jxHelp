@@ -30,6 +30,9 @@ public class LoginActivity extends BaseActivity {
     private EditText password;
     private Button login;
     private String url1="http://jw.jxust.cn/default2.aspx";
+    private String url2="http://jw.jxust.cn/jstjkbcx.aspx?zgh=";
+    private String url3="http://jw.jxust.cn/js_main.aspx?xh=";
+    private String kc;
 
     public static String user;
     public static String pass;
@@ -47,7 +50,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.login_activity);
         initView();
         defaultHttpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
-        defaultHttpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT,10000);
+        defaultHttpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +64,7 @@ public class LoginActivity extends BaseActivity {
         password= (EditText) findViewById(R.id.password);
         login= (Button) findViewById(R.id.login_bt);
     }
-    public void login(String username,String password){
+    public void login(final String username,String password){
         if(username==null||username.length()<=0){
             ToastUtils.showShort("用户名不能为空!");
             return;
@@ -78,6 +81,12 @@ public class LoginActivity extends BaseActivity {
             public void run() {
 
                 if (postSuccess()){
+                    try {
+                        kc=HttpUtils.getHttp(url2+user+"&xm="+xm+"&gnmkdm=N122303",defaultHttpClient,url3+user);
+                        System.out.println("kc----------:"+kc);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent);
                     pd.cancel();
