@@ -34,7 +34,8 @@
         android:layout_marginTop="20dp"
         android:layout_toRightOf="@id/user"
         android:hint="请输入用户名"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:text="050107" />
 
     <TextView
         android:id="@+id/pass"
@@ -58,7 +59,8 @@
         android:layout_toRightOf="@id/pass"
         android:hint="请输入密码"
         android:inputType="textPassword"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:text="zj771211" />
 
     <Button
         android:id="@+id/login_bt"

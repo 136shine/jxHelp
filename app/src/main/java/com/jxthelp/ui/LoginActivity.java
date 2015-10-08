@@ -3,22 +3,37 @@ package com.jxthelp.ui;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.jxthelp.R;
 import com.jxthelp.util.HttpUtils;
 import com.jxthelp.util.StringUtils;
 import com.jxthelp.util.ToastUtils;
 
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -84,6 +99,51 @@ public class LoginActivity extends BaseActivity {
                     try {
                         kc=HttpUtils.getHttp(url2+user+"&xm="+xm+"&gnmkdm=N122303",defaultHttpClient,url3+user);
                         System.out.println("kc----------:"+kc);
+                        //解析
+
+                        org.jsoup.nodes.Document doc= Jsoup.parse(kc);
+                        //获取每个<tr></tr>数据
+                        Elements elements=doc.select(".formbox").select("tr");
+                        List<Element> list=new ArrayList<Element>();
+                        for(int i=0;i<elements.size();i++){
+                            //筛选出有课的<tr></tr>数据
+                            if(!elements.get(i).select("td[align=Center][rowspan=2]").text().isEmpty()){
+                                list.add(elements.get(i));
+                                System.out.println(i+":"+elements.get(i));
+                            }
+                        }
+                        for(int j=0;j<list.size();j++){
+                            //获取各个星期中的数据
+                            Elements values=list.get(j).select("td[align=Center]");
+                            System.out.println("values:     "+values);
+                            for(int k=0;k<values.size();k++){
+                                //得到相关课的数据
+                                if(!values.get(k).select("td[align=Center][rowspan=2]").text().isEmpty()){
+                                    System.out.println("星期："+(k+1));
+                                    String contents=values.get(k).select("font").first().text();
+                                    String[] value=contents.split(" ");
+                                    for (int n=0;n<value.length;n++){
+                                        System.out.println("value"+n+":"+value[n]);
+                                    }
+                                    System.out.println("-------------");
+                                }
+                            }
+                        }
+
+
+                        /*Elements elements=doc.select(".formbox").select("td[align=Center][rowspan=2]");
+                        System.out.println("elements------------:"+elements);
+                        for(int i=0;i<elements.size();i++){
+                            String values=elements.get(i).select("font").first().text();
+                            String[] value=values.split(" ");
+                            System.out.println("values:"+values);
+                            for (int j=0;j<value.length;j++){
+                                System.out.println("value"+j+":"+value[j]);
+                            }
+                            System.out.println("---------");
+                        }*/
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -142,6 +202,16 @@ public class LoginActivity extends BaseActivity {
 
     //判读是否登入成功
     public boolean postSuccess(){
+        List<Cookie> cookies=defaultHttpClient.getCookieStore().getCookies();
+        Cookie cookie;
+        if(cookies.isEmpty()){
+            Log.d("TAG","cookie为空");
+        }else {
+            for(int i=0;i<cookies.size();i++){
+//                cookie=cookies.get(i);
+                Log.d("TAG",cookies.get(i).getName()+"="+cookies.get(i).getValue());
+            }
+        }
         StringTokenizer tokenizer;
         user=username.getText().toString();
         pass=password.getText().toString();
@@ -161,7 +231,30 @@ public class LoginActivity extends BaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(info!=null){
+        /*RequestQueue mRequestQueue= Volley.newRequestQueue(this);
+        StringRequest mStringRequest=new StringRequest(Request.Method.POST, url1, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                System.out.println("s------------------------------:"+s.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params=new HashMap<String,String>();
+                params.put("__VIEWSTATE",getData());
+                params.put("txtUserName", user);
+                params.put("TextBox2", pass);
+                params.put("RadioButtonList1", "%BD%CC%CA%A6&");
+                return params;
+            }
+        };
+        mRequestQueue.add(mStringRequest);*/
+        if(info !=null){
             tokenizer=new StringTokenizer(info);
             while(tokenizer.hasMoreTokens()){
                 String values=tokenizer.nextToken();
@@ -190,5 +283,6 @@ public class LoginActivity extends BaseActivity {
             System.out.println("空");
             return false;
         }
+//        return true;
     }
 }
