@@ -5,6 +5,8 @@
     <color name="login_text">#225a96</color>
     <color name="course_name">#995902d9</color>
     <color name="title_kc">#ee0782c9</color>
+    <color name="title_kc1">#f7000000</color>
+    <color name="line">#e3e3e8</color>
     <color name="empty">#af9e12ae</color>
     <color name="text_jieshu">#56000000</color>
     <color name="text_xiqi">#99000000</color>

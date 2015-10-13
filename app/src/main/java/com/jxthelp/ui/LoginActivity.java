@@ -173,11 +173,11 @@ public class LoginActivity extends BaseActivity {
 
     public void login(final String username, String password) {
         if (username == null || username.length() <= 0) {
-            ToastUtils.showShort("用户名不能为空!");
+            ToastUtils.showShort("用户名或密码不能为空!");
             return;
         }
         if (password == null || password.length() <= 0) {
-            ToastUtils.showShort("密码不能为空!");
+            ToastUtils.showShort("用户名或密码不能为空!");
             return;
         }
         pd = ProgressDialog.show(this, "登入中...", "请稍后", true);
