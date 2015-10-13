@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
@@ -25,6 +26,7 @@ import java.util.List;
  * Email: idisfkj@qq.com
  */
 public class HttpUtils {
+    public static List<Cookie> cookie;
     public HttpUtils() {
     }
 
@@ -42,8 +44,7 @@ public class HttpUtils {
         HttpPost request = new HttpPost(url);
         request.setEntity(new UrlEncodedFormEntity(pair, "gb2312"));//此处一定要用gb2312
         request.setHeader("Referer", setHeader);
-//        defaultHttpClient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY );
-        defaultHttpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
+        defaultHttpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 20000);
         defaultHttpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);
         HttpResponse response = defaultHttpClient.execute(request);
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
