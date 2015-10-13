@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_kc">
+
+        <TextView
+            android:id="@+id/flag"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="6dp"
+            android:layout_toLeftOf="@id/flag"
+            android:gravity="center"
+            android:text="当前第"
+            android:textColor="@android:color/white"
+            android:textSize="25sp" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-8dp"
+            android:layout_toRightOf="@id/title"
+            android:gravity="center"
+            android:scrollbars="none">
+        </Spinner>
+        <TextView
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_toRightOf="@id/spinner"
+            android:id="@+id/ts_tv"
+            android:textColor="@android:color/holo_red_dark"
+            android:text="(非本周)"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <RelativeLayout
+                android:id="@+id/extra_content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/empty"
+                    style="@style/CoursetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    android:id="@+id/mon"
+                    style="@style/CoursetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@id/empty"
+                    android:text="@string/mon" />
+
+                <TextView
+                    android:id="@+id/tue"
+                    style="@style/CoursetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@id/mon"
+                    android:text="@string/tue" />
+
+                <TextView
+                    android:id="@+id/wen"
+                    style="@style/CoursetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@id/tue"
+                    android:text="@string/wen" />
+
+                <TextView
+                    android:id="@+id/thu"
+                    style="@style/CoursetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@id/wen"
+                    android:text="@string/thu" />
+
+                <TextView
+                    android:id="@+id/fri"
+                    style="@style/CoursetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@id/thu"
+                    android:text="@string/fri" />
+
+                <TextView
+                    android:id="@+id/sta"
+                    style="@style/CoursetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@id/fri"
+                    android:text="@string/sta" />
+
+                <TextView
+                    android:id="@+id/sun"
+                    style="@style/CoursetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@id/sta"
+                    android:text="@string/sun" />
+
+                <ScrollView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/empty"
+                    android:scrollbars="none">
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:id="@+id/course_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <RelativeLayout
+                            android:id="@+id/course_kb"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+
+                </ScrollView>
+
+            </RelativeLayout>
+
+
+        </HorizontalScrollView>
+    </RelativeLayout>
+
+</LinearLayout>

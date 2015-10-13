@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,11 +35,19 @@ public class MainActivity extends BaseActivity {
     //long
     private long mExitTime;
 
+    private DisplayMetrics displayMetrics;
+    public static int width;
+    public static int height;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        displayMetrics =new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        width=displayMetrics.widthPixels;
+        height=displayMetrics.heightPixels;
 
         View view=findViewById(R.id.drawer_main);
         initTabView(view);
@@ -63,7 +72,7 @@ public class MainActivity extends BaseActivity {
     public void initTabView(View view){
         mLayoutInflater=LayoutInflater.from(this);
         //找到tabHost
-        mFragmentTabHost= (FragmentTabHost) view.findViewById(android.R.id.tabhost);
+        mFragmentTabHost = (FragmentTabHost) view.findViewById(android.R.id.tabhost);
         mFragmentTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         for(int i=0;i<fragmentName.length;i++){
             // 给每个Tab按钮设置图标和内容
@@ -91,7 +100,7 @@ public class MainActivity extends BaseActivity {
     public View getTabView(int i){
         View view=mLayoutInflater.inflate(R.layout.tab_item, null);
         imageView= (ImageView) view.findViewById(R.id.tab_image);
-        textView= (TextView) view.findViewById(R.id.tab_text);
+        textView = (TextView) view.findViewById(R.id.tab_text);
         imageView.setImageResource(R.drawable.star);
         textView.setText(fragmentName[i]);
         return view;
