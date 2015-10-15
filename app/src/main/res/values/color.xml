@@ -10,4 +10,9 @@
     <color name="empty">#af9e12ae</color>
     <color name="text_jieshu">#56000000</color>
     <color name="text_xiqi">#99000000</color>
+    <color name="courese_detail">#0e7dcc</color>
+    <color name="course_techer">#0ea0cc</color>
+    <color name="course_room">#56989e</color>
+    <color name="course_zhou">#73999c</color>
+    <color name="course_title">#e71e256b</color>
 </resources>

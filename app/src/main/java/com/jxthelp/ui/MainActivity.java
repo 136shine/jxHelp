@@ -27,7 +27,7 @@ public class MainActivity extends BaseActivity {
     private DrawerLayout drawerLayout;
     private FragmentTabHost mFragmentTabHost;
     private LayoutInflater mLayoutInflater;
-    private String[] fragmentName={"新闻","课程","考试"};
+    private String[] fragmentName={"新闻","课程","用户"};
     private Class fragmentArray[]={FragmentNews.class, FragmentKC.class, FragmentTest.class};
     private ImageView imageView;
     private TextView textView;
@@ -101,7 +101,11 @@ public class MainActivity extends BaseActivity {
         View view=mLayoutInflater.inflate(R.layout.tab_item, null);
         imageView= (ImageView) view.findViewById(R.id.tab_image);
         textView = (TextView) view.findViewById(R.id.tab_text);
-        imageView.setImageResource(R.drawable.star);
+        switch (i){
+            case 0:imageView.setImageResource(R.drawable.news_bg);break;
+            case 1:imageView.setImageResource(R.drawable.kc_bg);break;
+            case 2:imageView.setImageResource(R.drawable.user_bg);break;
+        }
         textView.setText(fragmentName[i]);
         return view;
     }
@@ -125,7 +129,7 @@ public class MainActivity extends BaseActivity {
         if(keyCode==KeyEvent.KEYCODE_BACK) {
             //防止按一次退出
             if (System.currentTimeMillis() - mExitTime >2000) {
-                ToastUtils.showShort("在按一次回到桌面");
+                ToastUtils.showShort("再按一次回到桌面");
                 mExitTime = System.currentTimeMillis();
             } else {
                 finish();

@@ -3,7 +3,10 @@ package com.jxthelp.ui;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,6 +62,7 @@ public class LoginActivity extends BaseActivity {
     private String url2 = "http://jw.jxust.cn/jstjkbcx.aspx?zgh=";
     private String url3 = "http://jw.jxust.cn/js_main.aspx?xh=";
     private String kc;
+    private String message;
 
     private List<CourseInfo> courseInfos = new ArrayList<CourseInfo>();
 
@@ -76,6 +80,7 @@ public class LoginActivity extends BaseActivity {
     public static XueQi xueQi;
 
     private int t;
+    private long mExitTime;
 
     private DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
 
@@ -92,28 +97,30 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 login(username.getText().toString().trim(), password.getText().toString().trim());
-                RequestQueue mRequestQueue = Volley.newRequestQueue(App.getContext());
-                StringRequest mStringRequest = new StringRequest("http://www.jxust.cn/", new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        System.out.println("请求成功!");
-                        org.jsoup.nodes.Document doc = Jsoup.parse(s);
-                        Elements elements = doc.select("ul[id=tc0]").select("a[href]");
-                        for (int i = 0; i < elements.size(); i++) {
-                            System.out.println(i + ":  " + elements.get(i));
-                            System.out.println(i + ": " + elements.get(i).attr("href"));
-                            listLink.add(elements.get(i).attr("href"));
-                            System.out.println(i + ": " + elements.get(i).text());
-                            listTitle.add(elements.get(i).text());
+                if (listTitle.size()<1) {
+                    RequestQueue mRequestQueue = Volley.newRequestQueue(App.getContext());
+                    StringRequest mStringRequest = new StringRequest("http://www.jxust.cn/", new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            System.out.println("请求成功");
+                            org.jsoup.nodes.Document doc = Jsoup.parse(s);
+                            Elements elements = doc.select("ul[id=tc0]").select("a[href]");
+                            for (int i = 0; i < elements.size(); i++) {
+                                System.out.println(i + ":  " + elements.get(i));
+                                System.out.println(i + ": " + elements.get(i).attr("href"));
+                                listLink.add(elements.get(i).attr("href"));
+                                System.out.println(i + ": " + elements.get(i).text());
+                                listTitle.add(elements.get(i).text());
+                            }
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        System.out.println("请求失败：" + volleyError.toString());
-                    }
-                });
-                mRequestQueue.add(mStringRequest);
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            System.out.println("请求失败：" + volleyError.toString());
+                        }
+                    });
+                    mRequestQueue.add(mStringRequest);
+                }
             }
         });
         /*test.setOnClickListener(new View.OnClickListener() {
@@ -172,15 +179,16 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void login(final String username, String password) {
+        message="登录成功";
         if (username == null || username.length() <= 0) {
-            ToastUtils.showShort("用户名或密码不能为空!");
+            ToastUtils.showShort("请输入账号");
             return;
         }
         if (password == null || password.length() <= 0) {
-            ToastUtils.showShort("用户名或密码不能为空!");
+            ToastUtils.showShort("请输入密码");
             return;
         }
-        pd = ProgressDialog.show(this, "登入中...", "请稍后", true);
+        pd = ProgressDialog.show(this, " 登录中...", "请稍后...", true);
 
         //要在主线程外加载
         new Thread(new Runnable() {
@@ -189,9 +197,11 @@ public class LoginActivity extends BaseActivity {
 
                 if (postSuccess()) {
                     try {
+
                         kc = HttpUtils.getHttp(url2 + user + "&xm=" + xm + "&gnmkdm=N122303", defaultHttpClient, url3 + user);
                         System.out.println("kc----------:" + kc);
                         //解析
+
 
                         org.jsoup.nodes.Document doc = Jsoup.parse(kc);
 
@@ -229,7 +239,9 @@ public class LoginActivity extends BaseActivity {
                                     //获取第一个font数据
                                     String contents = values.get(k).select("font").first().text();
                                     String[] value = contents.split(" ");
-                                    data.setCourseInfo(value[0].concat(value[3]).concat(value[4]));
+                                    data.setCourseName(value[0]);
+                                    data.setCourseRoom(value[3]);
+                                    data.setCourseClass(value[4]);
                                     int index1 = value[1].indexOf("-");
                                     int index2 = value[1].indexOf("(");
                                     int index3 = value[1].indexOf(",");
@@ -261,20 +273,32 @@ public class LoginActivity extends BaseActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    pd.cancel();
-                    finish();
+                    if (kc==null){
+                        pd.cancel();
+                        message="网络异常";
+                    }else {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        pd.cancel();
+                        finish();
+                    }
                 } else {
-
+                    pd.cancel();
+                    message="登录失败";
                 }
 
-
+                handler.sendMessage(handler.obtainMessage());
             }
         }).start(); //start
 
 
     }
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            ToastUtils.showShort(message);
+        }
+    };
 
 
     //获取post __VIEWSTATE的参数值
@@ -441,6 +465,20 @@ public class LoginActivity extends BaseActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            if(System.currentTimeMillis()-mExitTime>2000){
+                ToastUtils.showShort("再按一次回到桌面");
+                mExitTime=System.currentTimeMillis();
+            }else {
+                finish();
+            }
+            return  true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
