@@ -2,6 +2,7 @@ package com.jxthelp.fragment;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import com.jxthelp.App;
 import com.jxthelp.R;
 import com.jxthelp.bean.CourseInfo;
 import com.jxthelp.bean.XueQi;
+import com.jxthelp.ui.CourseDetail;
 import com.jxthelp.ui.LoginActivity;
 import com.jxthelp.ui.MainActivity;
 
@@ -68,14 +71,15 @@ public class FragmentKC extends Fragment {
     @InjectView(R.id.ts_tv)
     TextView ts;
 
+
     private int averWidth;
     private int averHeight;
     private int width;
     private int height;
     private int zhouShu;
-    private String[] zhou=new String[25];
-    private XueQi xueQi=LoginActivity.xueQi;
-    private Context mContext=App.getContext();
+    private String[] zhou = new String[25];
+    private XueQi xueQi = LoginActivity.xueQi;
+    private Context mContext = App.getContext();
 
     private List<CourseInfo> list;
 
@@ -92,8 +96,8 @@ public class FragmentKC extends Fragment {
 
         width = MainActivity.width;
         height = MainActivity.height;
-        averWidth = width / 4;
-        averHeight = height / 8;
+        averWidth = width / 5;
+        averHeight = height / 10;
 
         empty.setWidth(averWidth * 1 / 2);
         mon.setWidth(averWidth);
@@ -104,21 +108,22 @@ public class FragmentKC extends Fragment {
         sta.setWidth(averWidth);
         sun.setWidth(averWidth);
 
-        zhouShu=getCurrentZhou();
+        zhouShu = getCurrentZhou();
 
         Zhou();
         setExcell();
-        if((zhouShu)%2==1){
+        if ((zhouShu) % 2 == 1) {
             empty.setText("单");
-        }else {
+        } else {
             empty.setText("双");
         }
         empty.setTextSize(18);
         empty.setGravity(Gravity.CENTER);
         empty.setTextColor(getResources().getColor(R.color.text_xiqi));
 
-        spinner.setSelection(zhouShu-1,true);
+        spinner.setSelection(zhouShu - 1, true);
 //        getData(week-startWeek);
+
 
         return view;
     }
@@ -162,43 +167,68 @@ public class FragmentKC extends Fragment {
     }
 
     public void getData(int position) {
-        if((position+1)%2==1){
+        if ((position + 1) % 2 == 1) {
             empty.setText("单");
-        }else {
+        } else {
             empty.setText("双");
         }
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getStart() <= (position + 1) && list.get(i).getEnd() >= (position + 1)) {
-                int[] backGround = {R.drawable.course_blue, R.drawable.course_green, R.drawable.course_pink, R.drawable.course_purple, R.drawable.course_red, R.drawable.course_yellow};
+            final int t = i;
+            //还需上的课
+            if (list.get(i).getEnd() >= (position + 1)) {
                 Button tv = new Button(getActivity());
                 RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(averWidth * 31 / 32, (averHeight - 2) * 2);
                 //设置左，上边距
                 rl.topMargin = 2 + ((list.get(i).getClassNumber() - 1) * averHeight);
-                rl.leftMargin=2+(averWidth*1/2)+(list.get(i).getXinQi()-1)*averWidth;
+                rl.leftMargin = 2 + (averWidth * 1 / 2) + (list.get(i).getXinQi() - 1) * averWidth;
 
-                if (list.get(i).getFlag() == (position + 1) % 2 || list.get(i).getFlag() == -1) {
-                    tv.setText(list.get(i).getCourseInfo());
-                    tv.setTextSize(12);
-                    tv.setBackgroundResource(backGround[i % 6]);
-                    tv.setTextColor(Color.WHITE);
-                    tv.getBackground().setAlpha(222);
-                    tv.setLayoutParams(rl);
+                tv.setTextSize(12);
+                tv.setTextColor(Color.WHITE);
+                tv.getBackground().setAlpha(222);
+                tv.setLayoutParams(rl);
+                if (list.get(i).getStart() <= (position + 1)) {
+                    int[] backGround = {R.drawable.course_blue_bg, R.drawable.course_green_bg, R.drawable.course_pink_bg, R.drawable.course_purple_bg, R.drawable.course_red_bg, R.drawable.course_yellow_bg};
+
+                    if (list.get(i).getFlag() == (position + 1) % 2 || list.get(i).getFlag() == -1) {
+                        tv.setText(list.get(i).getCourseName() + "  " + list.get(i).getCourseRoom());
+                        tv.setBackgroundResource(backGround[i % 6]);
 //                    courseKb.setGravity(Gravity.CENTER);
-                    courseKb.addView(tv);
-                }
-            }
+                    } else {
+                        tv.setText("[非本周]" + "  " + list.get(i).getCourseName() + "  " + list.get(i).getCourseRoom());
+                        tv.setBackgroundResource(R.drawable.course_no_bg);
+                    }
 
+                } else{
+                    tv.setText("[非本周]" + "  " + list.get(i).getCourseName() + "  " + list.get(i).getCourseRoom());
+                    tv.setBackgroundResource(R.drawable.course_no_bg);
+                }
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(App.getContext(), CourseDetail.class);
+                        intent.putExtra("courseName", list.get(t).getCourseName());
+                        intent.putExtra("courseRoom", list.get(t).getCourseRoom());
+                        intent.putExtra("courseZhou", list.get(t).getStart() + "-" + list.get(t).getEnd());
+                        intent.putExtra("courseClass", list.get(t).getCourseClass());
+                        intent.putExtra("courseJS", String.valueOf(list.get(t).getClassNumber()));
+                        intent.putExtra("courseXQ", String.valueOf(list.get(t).getXinQi()));
+                        intent.putExtra("Flag", String.valueOf(list.get(t).getFlag()));
+                        startActivity(intent);
+                    }
+                });
+                courseKb.addView(tv);
+            }
         }
     }
 
     /**
      * Spinner
      */
-    public void Zhou(){
-        for(int i=0;i<25;i++){
-            zhou[i]=(i+1)+"周";
+    public void Zhou() {
+        for (int i = 0; i < 25; i++) {
+            zhou[i] = (i + 1) + "周";
         }
-        BaseAdapter adapter=new BaseAdapter() {
+        BaseAdapter adapter = new BaseAdapter() {
             @Override
             public int getCount() {
                 return zhou.length;
@@ -217,13 +247,13 @@ public class FragmentKC extends Fragment {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 ViewHolder viewHolder;
-                if(convertView==null){
-                    viewHolder=new ViewHolder();
-                    convertView=LayoutInflater.from(mContext).inflate(R.layout.spinner_item,null);
-                    viewHolder.sTv= (TextView) convertView.findViewById(R.id.spinner_tv);
+                if (convertView == null) {
+                    viewHolder = new ViewHolder();
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.spinner_item, null);
+                    viewHolder.sTv = (TextView) convertView.findViewById(R.id.spinner_tv);
                     convertView.setTag(viewHolder);
-                }else {
-                    viewHolder= (ViewHolder) convertView.getTag();
+                } else {
+                    viewHolder = (ViewHolder) convertView.getTag();
                 }
                 viewHolder.sTv.setText(zhou[position]);
                 return convertView;
@@ -235,9 +265,9 @@ public class FragmentKC extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 courseKb.removeAllViews();
                 getData(i);
-                if(zhouShu!=(i+1)){
+                if (zhouShu != (i + 1)) {
                     ts.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     ts.setVisibility(View.GONE);
                 }
             }
@@ -248,65 +278,66 @@ public class FragmentKC extends Fragment {
             }
         });
     }
-    public class ViewHolder{
+
+    public class ViewHolder {
         private TextView sTv;
 
     }
 
     /**
      * 获取当前周
+     *
      * @return 当前周数
      */
-    public int getCurrentZhou(){
-        int Zs=0;
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar=Calendar.getInstance();
-        Calendar calendar1=Calendar.getInstance();
+    public int getCurrentZhou() {
+        int Zs = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar1 = Calendar.getInstance();
         try {
-            int year=calendar.get(Calendar.YEAR);
-            int month=calendar.get(Calendar.MONTH);
-            int day=calendar.get(Calendar.DAY_OF_MONTH);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
             calendar.setFirstDayOfWeek(Calendar.MONDAY);//设置已星期一为一周的开始，默认为sunday
             calendar1.setFirstDayOfWeek(Calendar.MONDAY);
-            System.out.println(year+"-"+(month+1)+"-"+day);
+            System.out.println(year + "-" + (month + 1) + "-" + day);
             //month+1 可能是API默认原因月份要＋1
-            calendar.setTime(sdf.parse(year+"-"+(month+1)+"-"+day));
+            calendar.setTime(sdf.parse(year + "-" + (month + 1) + "-" + day));
             //判断学期
-            if(Integer.parseInt(xueQi.getXq())==1) {
+            if (Integer.parseInt(xueQi.getXq()) == 1) {
                 //上半学期开学时间
                 calendar1.setTime(sdf.parse(xueQi.getXnUp() + "-9-6"));
-            }else {
+            } else {
                 //待确定下半学期开学时间
-                calendar1.setTime(sdf.parse(xueQi.getXnDown()+"-9-6"));
+                calendar1.setTime(sdf.parse(xueQi.getXnDown() + "-9-6"));
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        int startWeek=calendar1.get(Calendar.WEEK_OF_YEAR);
-        int week=calendar.get(Calendar.WEEK_OF_YEAR);
+        int startWeek = calendar1.get(Calendar.WEEK_OF_YEAR);
+        int week = calendar.get(Calendar.WEEK_OF_YEAR);
         //是否是跨年
-        if(week<startWeek){
-            for(int i=0;i<8;i++) {
+        if (week < startWeek) {
+            for (int i = 0; i < 8; i++) {
                 try {
                     calendar.setTime(sdf.parse(xueQi.getXnUp() + "-12-" + (31 - i)));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                int total=calendar.get(Calendar.WEEK_OF_YEAR);
+                int total = calendar.get(Calendar.WEEK_OF_YEAR);
                 //获得一年的总周数
-                if(total>1) {
-                    i=8;
+                if (total > 1) {
+                    i = 8;
                     //获取目前的周数
                     Zs = total - startWeek + week;
                 }
             }
-        }else {
+        } else {
             //获取目前的周数
             Zs = week - startWeek;
         }
         return Zs;
     }
-
 
     @Override
     public void onDestroyView() {

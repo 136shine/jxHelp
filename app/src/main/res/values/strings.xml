@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JXTHelp</string>
+    <string name="app_name">江理教师助手</string>
 
     <string name="action_settings">Settings</string>
     <string name="drawer_close">close</string>
@@ -21,4 +21,5 @@
     <string name="fri">星期五</string>
     <string name="sta">星期六</string>
     <string name="sun">星期日</string>
+    <string name="course_detail">课程详情</string>
 </resources>

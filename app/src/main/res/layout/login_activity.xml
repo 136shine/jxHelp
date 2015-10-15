@@ -55,7 +55,7 @@
             android:layout_marginTop="30dp"
             android:layout_toRightOf="@id/user"
             android:background="@null"
-            android:hint="请输入用户名"
+            android:hint="请输入账号"
             android:singleLine="true"
             android:text="050107" />
 

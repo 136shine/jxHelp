@@ -9,6 +9,7 @@
         android:layout_height="50dp"
         android:background="@color/title_kc">
 
+
         <TextView
             android:id="@+id/flag"
             android:layout_width="0dp"
@@ -27,18 +28,28 @@
             android:textSize="25sp" />
 
         <Spinner
+            android:layout_marginTop="6dp"
+            android:background="@null"
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-8dp"
+            android:layout_marginLeft="-4dp"
             android:layout_toRightOf="@id/title"
             android:gravity="center"
             android:scrollbars="none">
+
         </Spinner>
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/spinner"
+            android:id="@+id/iv"
+            android:background="@drawable/ic_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <TextView
             android:gravity="center"
             android:visibility="gone"
-            android:layout_toRightOf="@id/spinner"
+            android:layout_toRightOf="@id/iv"
             android:id="@+id/ts_tv"
             android:textColor="@android:color/holo_red_dark"
             android:text="(非本周)"
