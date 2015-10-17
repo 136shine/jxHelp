@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="keche"
-        android:textSize="30sp"/>
+        android:id="@+id/lg_text"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

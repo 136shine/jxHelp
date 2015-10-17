@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jxthelp.R;
+import com.jxthelp.fragment.FragmentLGNews;
 import com.jxthelp.fragment.FragmentNews;
 
 import org.jsoup.Jsoup;
@@ -28,7 +29,7 @@ import butterknife.InjectView;
 public class WebView extends BaseActivity {
     @InjectView(R.id.webView)
     android.webkit.WebView webView;
-    private String mUrl = LoginActivity.listLink.get(FragmentNews.item);
+    private String mUrl = LoginActivity.listLink.get(FragmentLGNews.item);
     private static Elements elements1;
     private static Elements elements2;
 

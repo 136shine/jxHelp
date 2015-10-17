@@ -1,32 +1,16 @@
 package com.jxthelp.fragment;
 
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.jxthelp.App;
 import com.jxthelp.R;
-import com.jxthelp.ui.LoginActivity;
-import com.jxthelp.ui.WebView;
-import com.jxthelp.util.ToastUtils;
-
-import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
+import com.jxthelp.adapter.NewsViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,70 +22,151 @@ import butterknife.InjectView;
  * Created by idisfkj on 15-9-17 12:17.
  * Email: idisfkj@qq.com
  */
-public class FragmentNews extends Fragment {
-    @InjectView(R.id.new_list)
-    ListView newList;
-    public static int item;
-    private List<String> listTitle = LoginActivity.listTitle;
+public class FragmentNews extends Fragment implements View.OnClickListener {
+
+
+    @InjectView(R.id.tv_lg)
+    TextView tvLg;
+    @InjectView(R.id.tv_xy)
+    TextView tvXy;
+    @InjectView(R.id.tv_mt)
+    TextView tvMt;
+    @InjectView(R.id.tv_xs)
+    TextView tvXs;
+    @InjectView(R.id.news_viewpager)
+    ViewPager newsViewpager;
+    @InjectView(R.id.lg_line)
+    TextView lgLine;
+    @InjectView(R.id.xy_line)
+    TextView xyLine;
+    @InjectView(R.id.mt_line)
+    TextView mtLine;
+    @InjectView(R.id.xs_line)
+    TextView xsLine;
+    private List<Fragment> list = new ArrayList<Fragment>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, null);
         ButterKnife.inject(this, view);
-        newList.setAdapter(adapter);
-
-        newList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                item = i;
-                ToastUtils.showShort(""+item);
-                Intent intent = new Intent(getActivity(), WebView.class);
-                startActivity(intent);
-            }
-        });
+        tvLg.setTextColor(getResources().getColor(R.color.title_kc));
+        lgLine.setVisibility(View.VISIBLE);
+        list = getList();
+        setTVListener();
+        newsViewpager.setAdapter(new NewsViewPagerAdapter(getChildFragmentManager(), list));
+        newsViewpager.addOnPageChangeListener(new PageChangeListener());
+        System.out.println("onCreateView:" + newsViewpager.getCurrentItem());
         return view;
     }
 
-    BaseAdapter adapter = new BaseAdapter() {
+    public void setTVListener() {
+        tvLg.setOnClickListener(this);
+        tvXy.setOnClickListener(this);
+        tvMt.setOnClickListener(this);
+        tvXs.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_lg:
+                newsViewpager.setCurrentItem(0);
+                break;
+            case R.id.tv_xy:
+                newsViewpager.setCurrentItem(1);
+                break;
+            case R.id.tv_mt:
+                newsViewpager.setCurrentItem(2);
+                break;
+            case R.id.tv_xs:
+                newsViewpager.setCurrentItem(3);
+                break;
+        }
+    }
+
+    public class PageChangeListener implements ViewPager.OnPageChangeListener {
+
         @Override
-        public int getCount() {
-            return listTitle.size();
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
         }
 
         @Override
-        public Object getItem(int i) {
-            return listTitle.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            ViewHolder viewHolder;
-            if (view == null) {
-                viewHolder = new ViewHolder();
-                view = LayoutInflater.from(App.getContext()).inflate(R.layout.new_item, null);
-                viewHolder.textView = (TextView) view.findViewById(R.id.new_text);
-                view.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) view.getTag();
+        public void onPageSelected(int position) {
+            switch (position) {
+                case 0:
+                    tvLg.setTextColor(getResources().getColor(R.color.title_kc));
+                    tvXy.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvMt.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvXs.setTextColor(getResources().getColor(R.color.title_kc1));
+                    lgLine.setVisibility(View.VISIBLE);
+                    xyLine.setVisibility(View.GONE);
+                    mtLine.setVisibility(View.GONE);
+                    xsLine.setVisibility(View.GONE);
+                    break;
+                case 1:
+                    tvLg.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvXy.setTextColor(getResources().getColor(R.color.title_kc));
+                    tvMt.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvXs.setTextColor(getResources().getColor(R.color.title_kc1));
+                    lgLine.setVisibility(View.GONE);
+                    xyLine.setVisibility(View.VISIBLE);
+                    mtLine.setVisibility(View.GONE);
+                    xsLine.setVisibility(View.GONE);
+                    break;
+                case 2:
+                    tvLg.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvXy.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvMt.setTextColor(getResources().getColor(R.color.title_kc));
+                    tvXs.setTextColor(getResources().getColor(R.color.title_kc1));
+                    lgLine.setVisibility(View.GONE);
+                    xyLine.setVisibility(View.GONE);
+                    mtLine.setVisibility(View.VISIBLE);
+                    xsLine.setVisibility(View.GONE);
+                    break;
+                case 3:
+                    tvLg.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvXy.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvMt.setTextColor(getResources().getColor(R.color.title_kc1));
+                    tvXs.setTextColor(getResources().getColor(R.color.title_kc));
+                    lgLine.setVisibility(View.GONE);
+                    xyLine.setVisibility(View.GONE);
+                    mtLine.setVisibility(View.GONE);
+                    xsLine.setVisibility(View.VISIBLE);
+                    break;
             }
-            viewHolder.textView.setText(listTitle.get(i));
-            return view;
         }
-    };
 
-    public class ViewHolder {
-        private TextView textView;
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            System.out.println("state:" + state);
+        }
+    }
+
+    public List<Fragment> getList() {
+        FragmentLGNews fragmentLGNews = new FragmentLGNews();
+        FragmentXSNews fragmentXSNews = new FragmentXSNews();
+        FragmentMTNews fragmentMTNews = new FragmentMTNews();
+        FragmentXYNews fragmentXYNews = new FragmentXYNews();
+        list.add(fragmentLGNews);
+        list.add(fragmentXYNews);
+        list.add(fragmentMTNews);
+        list.add(fragmentXSNews);
+        return list;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        list.clear();
+        System.out.println("onDestroyView");
+    }
+
+    @Override
+    public void onDestroy() {
+        System.out.println("onDestroy");
+        super.onDestroy();
     }
 }

@@ -186,6 +186,7 @@ public class FragmentKC extends Fragment {
                 tv.setTextColor(Color.WHITE);
                 tv.getBackground().setAlpha(222);
                 tv.setLayoutParams(rl);
+                //正在上的课
                 if (list.get(i).getStart() <= (position + 1)) {
                     int[] backGround = {R.drawable.course_blue_bg, R.drawable.course_green_bg, R.drawable.course_pink_bg, R.drawable.course_purple_bg, R.drawable.course_red_bg, R.drawable.course_yellow_bg};
 

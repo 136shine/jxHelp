@@ -1,6 +1,7 @@
 package com.jxthelp.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
@@ -15,6 +16,7 @@ import java.util.TimerTask;
  * Email: idisfkj@qq.com
  */
 public class WelcomeActivity extends BaseActivity {
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +27,20 @@ public class WelcomeActivity extends BaseActivity {
         TimerTask timerTask=new TimerTask() {
             @Override
             public void run() {
-                Intent intent=new Intent(WelcomeActivity.this,LoginActivity.class);
-                startActivity(intent);
-                finish();
-
+                /*if(sp.getBoolean("isSaved",false)){
+                    Intent intent=new Intent(WelcomeActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {*/
+                    Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+//                }
             }
         };
-        timer.schedule(timerTask,2000);
+        timer.schedule(timerTask,3000);
+
 
     }
 
