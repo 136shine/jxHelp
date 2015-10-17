@@ -2,17 +2,17 @@ package com.jxthelp.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,31 +23,20 @@ import com.jxthelp.R;
 import com.jxthelp.bean.CourseInfo;
 import com.jxthelp.bean.XueQi;
 import com.jxthelp.util.HttpUtils;
-import com.jxthelp.util.StringUtils;
 import com.jxthelp.util.ToastUtils;
 
-import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Document;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * Created by idisfkj on 15-9-27 11:29.
@@ -75,29 +64,27 @@ public class LoginActivity extends BaseActivity {
     private String xh;
     public static String xm;
     public static int i;
-//    private static String __VIEWSTATE;
 
     public static XueQi xueQi;
 
     private int t;
     private long mExitTime;
-
-    private DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
-
     private ProgressDialog pd;
+    private SharedPreferences sp;
+    private boolean isSaved=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         initView();
-        defaultHttpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 20000);
-        defaultHttpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);
+        App.getHttpClient().getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 20000);
+        App.getHttpClient().getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login(username.getText().toString().trim(), password.getText().toString().trim());
-                if (listTitle.size()<1) {
+                if (listTitle.size() < 1) {
                     RequestQueue mRequestQueue = Volley.newRequestQueue(App.getContext());
                     StringRequest mStringRequest = new StringRequest("http://www.jxust.cn/", new Response.Listener<String>() {
                         @Override
@@ -123,54 +110,9 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-        /*test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                RequestQueue mRequestQueue = Volley.newRequestQueue(App.getContext());
-                StringRequest mStringRequest = new StringRequest("http://www.jxust.cn/", new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        System.out.println("请求成功!");
-                        org.jsoup.nodes.Document doc = Jsoup.parse(s);
-                        Elements elements = doc.select("ul[id=tc0]").select("a[href]");
-                        for (int i = 0; i < elements.size(); i++) {
-                            System.out.println(i + ":  " + elements.get(i));
-                            System.out.println(i + ": " + elements.get(i).attr("href"));
-                            listLink.add(elements.get(i).attr("href"));
-                            System.out.println(i + ": " + elements.get(i).text());
-                            listTitle.add(elements.get(i).text());
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        System.out.println("请求失败：" + volleyError.toString());
-                    }
-                });
-                mRequestQueue.add(mStringRequest);
-                test();
-            }
-
-        });*/
 
     }
 
-    /*    public void test(){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(2000);
-                        Intent intent=new Intent(LoginActivity.this,MainActivity.class);
-                        startActivity(intent);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }).start();
-        }*/
     public void initView() {
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
@@ -178,8 +120,8 @@ public class LoginActivity extends BaseActivity {
         test = (Button) findViewById(R.id.test);
     }
 
-    public void login(final String username, String password) {
-        message="登录成功";
+    public void login(final String username, final String password) {
+        message = "登录成功";
         if (username == null || username.length() <= 0) {
             ToastUtils.showShort("请输入账号");
             return;
@@ -188,6 +130,7 @@ public class LoginActivity extends BaseActivity {
             ToastUtils.showShort("请输入密码");
             return;
         }
+
         pd = ProgressDialog.show(this, " 登录中...", "请稍后...", true);
 
         //要在主线程外加载
@@ -198,7 +141,7 @@ public class LoginActivity extends BaseActivity {
                 if (postSuccess()) {
                     try {
 
-                        kc = HttpUtils.getHttp(url2 + user + "&xm=" + xm + "&gnmkdm=N122303", defaultHttpClient, url3 + user);
+                        kc = HttpUtils.getHttp(url2 + user + "&xm=" + xm + "&gnmkdm=N122303", App.getHttpClient(), url3 + user);
                         System.out.println("kc----------:" + kc);
                         //解析
 
@@ -273,18 +216,27 @@ public class LoginActivity extends BaseActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (kc==null){
+                    if (kc == null) {
                         pd.cancel();
-                        message="网络异常";
-                    }else {
+                        message = "网络异常";
+                    }
+                    /*//保存用户信息
+                    if(!sp.getBoolean("isSaved",false)) {
+                        isSaved = true;
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("username", username);
+                        editor.putString("password", password);
+                        editor.putString("xm", xm);
+                        editor.putBoolean("isSaved", true);
+                        editor.commit();
+                    }*/
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         pd.cancel();
                         finish();
-                    }
                 } else {
                     pd.cancel();
-                    message="登录失败";
+                    message = "登录失败";
                 }
 
                 handler.sendMessage(handler.obtainMessage());
@@ -293,7 +245,8 @@ public class LoginActivity extends BaseActivity {
 
 
     }
-    Handler handler=new Handler(){
+
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             ToastUtils.showShort(message);
@@ -323,9 +276,8 @@ public class LoginActivity extends BaseActivity {
         mRequestQueue.add(mStringRequest);*/
 
         try {
-            temp = HttpUtils.getHttp(url1, defaultHttpClient, "");
-
-            System.out.println("temp:----------" + temp);
+            temp = HttpUtils.getHttp(url1, App.getHttpClient(), "http://www.jxust.cn/");
+//            System.out.println("temp:----------" + temp);
 
         } catch (IOException e) {
             System.out.println("eee");
@@ -342,27 +294,34 @@ public class LoginActivity extends BaseActivity {
         return __VIEWSTATE;
     }
 
-    public String getCookie() {
-        HttpPost httpPost = new HttpPost(url1);
+    //判读是否登入成功
+    public boolean postSuccess() {
+        String info = null;
+        String cookieString = null;
+        user = username.getText().toString();
+        pass = password.getText().toString();
+        //获取Cookie
         try {
-            HttpResponse httpResponse = defaultHttpClient.execute(httpPost);
+            HttpUtils.postHttp(url1, App.getHttpClient(), new ArrayList<BasicNameValuePair>(),"");
+            org.apache.http.client.CookieStore mCookieStore=App.getHttpClient().getCookieStore();
+            List<Cookie> cookies=mCookieStore.getCookies();
+            if(cookies.isEmpty()){
+                System.out.println("Cookies为空");
+            }else {
+                for(int i=0;i<cookies.size();i++){
+                    Cookie cookie=cookies.get(i);
+                    Log.d("Cookie", cookies.get(i).getName() + "=" + cookies.get(i).getValue());
+                    cookieString= cookie.getName() + "=" + cookie.getValue() + "; domain=" + cookie.getDomain();
+                    /*SharedPreferences.Editor editor=sp.edit();
+                    editor.putString("cookie",cookieString);
+                    editor.commit();*/
+                    System.out.println("Cookie:"+cookieString);
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<Cookie> cookie = defaultHttpClient.getCookieStore().getCookies();
-        for (int i = 0; i < cookie.size(); i++) {
-            System.out.println("cookie" + i + "++++++++++++++++++++" + cookie.get(i).getName() + "=" + cookie.get(i).getValue());
-        }
-        return cookie.get(0).getValue();
-
-    }
-
-    //判读是否登入成功
-    public boolean postSuccess() {
-        user = username.getText().toString();
-        pass = password.getText().toString();
-
-
         List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
         pairs.add(new BasicNameValuePair("__VIEWSTATE", getData()));
         pairs.add(new BasicNameValuePair("txtUserName", user));
@@ -371,15 +330,13 @@ public class LoginActivity extends BaseActivity {
         pairs.add(new BasicNameValuePair("Button1", null));
         pairs.add(new BasicNameValuePair("lbLanguage", null));
 
-        String info = null;
         try {
-            info = HttpUtils.postHttp(url1, defaultHttpClient, pairs, "");
+            info = HttpUtils.postHttp(url1, App.getHttpClient(), pairs,cookieString);
             System.out.println("info-------------" + info);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         /*RequestQueue mRequestQueue = Volley.newRequestQueue(this);
         StringRequest mStringRequest = new StringRequest(Request.Method.POST,url1, new Response.Listener<String>() {
             @Override
@@ -469,17 +426,19 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
-            if(System.currentTimeMillis()-mExitTime>2000){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis() - mExitTime > 2000) {
                 ToastUtils.showShort("再按一次回到桌面");
-                mExitTime=System.currentTimeMillis();
-            }else {
+                mExitTime = System.currentTimeMillis();
+            } else {
                 finish();
             }
-            return  true;
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 
     @Override
     protected void onDestroy() {

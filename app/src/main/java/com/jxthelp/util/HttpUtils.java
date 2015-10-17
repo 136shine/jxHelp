@@ -1,5 +1,11 @@
 package com.jxthelp.util;
 
+import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
+
+import com.android.volley.Cache;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -26,6 +32,7 @@ import java.util.List;
  * Email: idisfkj@qq.com
  */
 public class HttpUtils {
+    public static String cookies;
     public static List<Cookie> cookie;
     public HttpUtils() {
     }
@@ -40,10 +47,13 @@ public class HttpUtils {
         return "";
     }
 
-    public static String postHttp(String url, DefaultHttpClient defaultHttpClient, List<BasicNameValuePair> pair, String setHeader) throws IOException {
+    public static String postHttp(String url, DefaultHttpClient defaultHttpClient, List<BasicNameValuePair> pair, String cookieString) throws IOException {
         HttpPost request = new HttpPost(url);
+        if (!cookieString.isEmpty()){
+            CookieManager cookieManager=CookieManager.getInstance();
+            cookieManager.setCookie(url, cookieString);
+        }
         request.setEntity(new UrlEncodedFormEntity(pair, "gb2312"));//此处一定要用gb2312
-        request.setHeader("Referer", setHeader);
         defaultHttpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 20000);
         defaultHttpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);
         HttpResponse response = defaultHttpClient.execute(request);
@@ -52,4 +62,9 @@ public class HttpUtils {
         }
         return "";
     }
+/*    private void removeAllCookie() {
+        cookieManager = CookieManager.getInstance();
+        cookieManager.removeAllCookie();
+        CookieSyncManager.getInstance().sync();
+    }*/
 }
