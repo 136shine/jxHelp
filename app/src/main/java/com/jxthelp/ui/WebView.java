@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.jxthelp.R;
 import com.jxthelp.fragment.FragmentLGNews;
 import com.jxthelp.fragment.FragmentNews;
+import com.jxthelp.util.VolleyRequest;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,7 +30,7 @@ import butterknife.InjectView;
 public class WebView extends BaseActivity {
     @InjectView(R.id.webView)
     android.webkit.WebView webView;
-    private String mUrl = LoginActivity.listLink.get(FragmentLGNews.item);
+    private String mUrl = MainActivity.listLink.get(FragmentLGNews.item);
     private static Elements elements1;
     private static Elements elements2;
 
@@ -38,7 +39,6 @@ public class WebView extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.web_view);
         ButterKnife.inject(this);
-        RequestQueue mRequestQueue = Volley.newRequestQueue(this);
         StringRequest mStringRequest = new StringRequest("http://www.jxust.cn" + mUrl, new Response.Listener<String>() {
             //            String text;
             @Override
@@ -46,7 +46,7 @@ public class WebView extends BaseActivity {
                 Document doc = Jsoup.parse(s);
                 elements1 = doc.select("center");
                 elements2 = doc.select("p[style]");
-                webView.loadDataWithBaseURL("http://www.jxust.cn/", "<div style=\"font-size:20px\">" + elements1.toString() + elements2.toString() + "</div>",
+                webView.loadDataWithBaseURL("http://www.jxust.cn/", "<div style=\"font-size:25px\">" + elements1.toString() + elements2.toString() + "</div>",
                         "text/html", "utf-8", null);
 
 
@@ -57,7 +57,7 @@ public class WebView extends BaseActivity {
 
             }
         });
-        mRequestQueue.add(mStringRequest);
+        VolleyRequest.addRequest(mStringRequest,"LGLink");
         WebSettings settings = webView.getSettings();
         //设置字体大小
         settings.setTextSize(WebSettings.TextSize.LARGEST);
@@ -67,19 +67,11 @@ public class WebView extends BaseActivity {
         //支持缩放
         settings.setSupportZoom(true);
         //出现缩放工具
+        settings.setDisplayZoomControls(false);
         settings.setBuiltInZoomControls(true);
         settings.setUseWideViewPort(true);//扩大比例的缩放
         //设置加载进来的页面自适应屏幕
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         settings.setLoadWithOverviewMode(true);
-//        webView.loadUrl("http://www.jxust.cn" + mUrl);
-//        webView.setWebViewClient(new WebViewClient() {
-//            // 重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
-//            @Override
-//            public boolean shouldOverrideUrlLoading(android.webkit.WebView view, String url) {
-//                view.loadUrl(url);
-//                return true;
-//            }
-//        });
     }
 }

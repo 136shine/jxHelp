@@ -27,4 +27,5 @@
     <string name="mt_news">媒体聚焦</string>
     <string name="xs_news">学术报告</string>
     <string name="news_title">校园资讯</string>
+    <string name="loda_text">正在拼命加载。。。</string>
 </resources>
