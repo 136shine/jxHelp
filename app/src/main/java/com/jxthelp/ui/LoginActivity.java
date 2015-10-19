@@ -12,6 +12,7 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -55,8 +56,7 @@ public class LoginActivity extends BaseActivity {
 
     private List<CourseInfo> courseInfos = new ArrayList<CourseInfo>();
 
-    public static List<String> listLink = new ArrayList<String>();
-    public static List<String> listTitle = new ArrayList<String>();
+
     public static List<CourseInfo> listCourse = new ArrayList<CourseInfo>();
 
     public static String user;
@@ -84,30 +84,16 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 login(username.getText().toString().trim(), password.getText().toString().trim());
-                if (listTitle.size() < 1) {
-                    RequestQueue mRequestQueue = Volley.newRequestQueue(App.getContext());
-                    StringRequest mStringRequest = new StringRequest("http://www.jxust.cn/", new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String s) {
-                            System.out.println("请求成功");
-                            org.jsoup.nodes.Document doc = Jsoup.parse(s);
-                            Elements elements = doc.select("ul[id=tc0]").select("a[href]");
-                            for (int i = 0; i < elements.size(); i++) {
-                                System.out.println(i + ":  " + elements.get(i));
-                                System.out.println(i + ": " + elements.get(i).attr("href"));
-                                listLink.add(elements.get(i).attr("href"));
-                                System.out.println(i + ": " + elements.get(i).text());
-                                listTitle.add(elements.get(i).text());
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            System.out.println("请求失败：" + volleyError.toString());
-                        }
-                    });
-                    mRequestQueue.add(mStringRequest);
-                }
+                /*if (listTitle.size() < 1) {
+
+                }*/
+            }
+        });
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -142,7 +128,7 @@ public class LoginActivity extends BaseActivity {
                     try {
 
                         kc = HttpUtils.getHttp(url2 + user + "&xm=" + xm + "&gnmkdm=N122303", App.getHttpClient(), url3 + user);
-                        System.out.println("kc----------:" + kc);
+//                        System.out.println("kc----------:" + kc);
                         //解析
 
 
@@ -312,9 +298,9 @@ public class LoginActivity extends BaseActivity {
                     Cookie cookie=cookies.get(i);
                     Log.d("Cookie", cookies.get(i).getName() + "=" + cookies.get(i).getValue());
                     cookieString= cookie.getName() + "=" + cookie.getValue() + "; domain=" + cookie.getDomain();
-                    /*SharedPreferences.Editor editor=sp.edit();
-                    editor.putString("cookie",cookieString);
-                    editor.commit();*/
+//                    SharedPreferences.Editor editor=sp.edit();
+//                    editor.putString("cookie",cookieString);
+//                    editor.commit();
                     System.out.println("Cookie:"+cookieString);
                 }
             }

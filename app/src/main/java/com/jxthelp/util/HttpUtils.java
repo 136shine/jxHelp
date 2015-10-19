@@ -49,10 +49,10 @@ public class HttpUtils {
 
     public static String postHttp(String url, DefaultHttpClient defaultHttpClient, List<BasicNameValuePair> pair, String cookieString) throws IOException {
         HttpPost request = new HttpPost(url);
-        if (!cookieString.isEmpty()){
+        /*if (!cookieString.isEmpty()){
             CookieManager cookieManager=CookieManager.getInstance();
             cookieManager.setCookie(url, cookieString);
-        }
+        }*/
         request.setEntity(new UrlEncodedFormEntity(pair, "gb2312"));//此处一定要用gb2312
         defaultHttpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 20000);
         defaultHttpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);

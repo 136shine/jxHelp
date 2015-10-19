@@ -2,6 +2,8 @@ package com.jxthelp.ui;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
@@ -11,16 +13,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.jxthelp.App;
 import com.jxthelp.R;
+import com.jxthelp.api.GetUrl;
 import com.jxthelp.drawer.DrawerActionBar;
 import com.jxthelp.fragment.DrawerFragment;
 import com.jxthelp.fragment.FragmentKC;
+import com.jxthelp.fragment.FragmentLGNews;
 import com.jxthelp.fragment.FragmentNews;
 import com.jxthelp.fragment.FragmentTest;
+import com.jxthelp.util.HttpUtils;
 import com.jxthelp.util.ToastUtils;
+import com.jxthelp.util.VolleyRequest;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private DrawerActionBar drawerActionBar;
@@ -39,6 +61,10 @@ public class MainActivity extends BaseActivity {
     public static int width;
     public static int height;
 
+    public static List<String> listLink = new ArrayList<String>();
+    public static List<String> listTitle = new ArrayList<String>();
+    public static List<String> listImage=new ArrayList<String>();
+    public static List<String> listDate=new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +77,6 @@ public class MainActivity extends BaseActivity {
 
         View view=findViewById(R.id.drawer_main);
         initTabView(view);
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerActionBar = new DrawerActionBar(this, drawerLayout, R.string.draweropen, R.string.drawer_close) {
             @Override
@@ -67,7 +92,20 @@ public class MainActivity extends BaseActivity {
         drawerLayout.setDrawerListener(drawerActionBar);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.left_layout, new DrawerFragment()).commit();
+        getData();
+//        getImageData();
     }
+    private Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:FragmentLGNews.lgAdapter.notifyDataSetChanged();
+                    break;
+
+            }
+        }
+    };
 
     public void initTabView(View view){
         mLayoutInflater=LayoutInflater.from(this);
@@ -123,6 +161,98 @@ public class MainActivity extends BaseActivity {
         }
 
     }
+    public void getData(){
+        StringRequest mStringRequest = new StringRequest("http://www.jxust.cn/list/10", new Response.Listener<String>() {
+            int m;
+            @Override
+            public void onResponse(String s) {
+                org.jsoup.nodes.Document doc = Jsoup.parse(s);
+                Elements elements = doc.select("li[class=frount1]").select("a[href]");
+                for (int i = 0; i < elements.size(); i++) {
+                    m = i;
+                    String link = elements.get(i).attr("href");
+                    listLink.add(link);
+                    String text = elements.get(i).text();
+                    int index = text.indexOf("]");
+                    int index1 = text.indexOf("[");
+                    String date = text.substring(index1 + 1, index);
+                    text = text.substring(index + 1).trim();
+                    listTitle.add(text);
+                    listDate.add(date);
+
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int n=0;n<listLink.size();n++){
+                            try {
+                                String a = HttpUtils.getHttp(GetUrl.ImageUrl+listLink.get(n),App.getHttpClient(),GetUrl.ImageUrl);
+                                Document doc1 = Jsoup.parse(a);
+                                if (!doc1.select("center").text().isEmpty()) {
+                                    Element element = doc1.select("center").select("img").first();
+                                    String imageUrl = element.attr("src");
+                                    System.out.println("imageUrl:" + imageUrl);
+                                    listImage.add(imageUrl);
+                                } else {
+                                    System.out.println("aa");
+                                    listImage.add("aa");
+                                }
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (listImage.size() == 20) {
+//                                FragmentLGNews.lgAdapter.notifyDataSetChanged();
+                                mHandler.sendEmptyMessage(0);
+                            }
+                        }
+                    }
+
+                }).start();
+
+
+                    //获取图片地址
+/*                        StringRequest stringRequestIV = new StringRequest(GetUrl.ImageUrl + listLink.get(n), new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String s) {
+                                Document doc = Jsoup.parse(s);
+                                if (!doc.select("center").text().isEmpty()) {
+                                    Element element = doc.select("center").select("img").first();
+                                    String imageUrl = element.attr("src");
+                                    System.out.println("imageUrl:" + imageUrl);
+                                    listImage.add(imageUrl);
+                                } else {
+                                    System.out.println("aa");
+                                    listImage.add("aa");
+                                }
+                                if (listImage.size() == 20) {
+                                    FragmentLGNews.lgAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                System.out.println("出错");
+                            }
+                        });
+                        VolleyRequest.addRequest(stringRequestIV, "LGImage");*/
+
+
+//                FragmentLGNews.lgAdapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("请求失败：" + volleyError.toString());
+            }
+        });
+        VolleyRequest.addRequest(mStringRequest,"LGNews");
+    }
+    public void getImageData() {
+        for (int i = 0; i < listLink.size(); i++) {
+
+        }
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -138,6 +268,16 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        listTitle.clear();
+        listLink.clear();
+        listImage.clear();
+        VolleyRequest.cancelAll("LGNews");
+
     }
 
     @Override
