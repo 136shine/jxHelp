@@ -31,6 +31,8 @@ import com.jxthelp.fragment.FragmentKC;
 import com.jxthelp.fragment.FragmentLGNews;
 import com.jxthelp.fragment.FragmentNews;
 import com.jxthelp.fragment.FragmentTest;
+import com.jxthelp.request.Listener;
+import com.jxthelp.request.NewsRequest;
 import com.jxthelp.util.HttpUtils;
 import com.jxthelp.util.ToastUtils;
 import com.jxthelp.util.VolleyRequest;
@@ -162,96 +164,17 @@ public class MainActivity extends BaseActivity {
 
     }
     public void getData(){
-        StringRequest mStringRequest = new StringRequest("http://www.jxust.cn/list/10", new Response.Listener<String>() {
-            int m;
+        NewsRequest.request(1, new Listener() {
             @Override
-            public void onResponse(String s) {
-                org.jsoup.nodes.Document doc = Jsoup.parse(s);
-                Elements elements = doc.select("li[class=frount1]").select("a[href]");
-                for (int i = 0; i < elements.size(); i++) {
-                    m = i;
-                    String link = elements.get(i).attr("href");
-                    listLink.add(link);
-                    String text = elements.get(i).text();
-                    int index = text.indexOf("]");
-                    int index1 = text.indexOf("[");
-                    String date = text.substring(index1 + 1, index);
-                    text = text.substring(index + 1).trim();
-                    listTitle.add(text);
-                    listDate.add(date);
+            public void onStart() {
 
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for(int n=0;n<listLink.size();n++){
-                            try {
-                                String a = HttpUtils.getHttp(GetUrl.ImageUrl+listLink.get(n),App.getHttpClient(),GetUrl.ImageUrl);
-                                Document doc1 = Jsoup.parse(a);
-                                if (!doc1.select("center").text().isEmpty()) {
-                                    Element element = doc1.select("center").select("img").first();
-                                    String imageUrl = element.attr("src");
-                                    System.out.println("imageUrl:" + imageUrl);
-                                    listImage.add(imageUrl);
-                                } else {
-                                    System.out.println("aa");
-                                    listImage.add("aa");
-                                }
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            if (listImage.size() == 20) {
-//                                FragmentLGNews.lgAdapter.notifyDataSetChanged();
-                                mHandler.sendEmptyMessage(0);
-                            }
-                        }
-                    }
-
-                }).start();
-
-
-                    //获取图片地址
-/*                        StringRequest stringRequestIV = new StringRequest(GetUrl.ImageUrl + listLink.get(n), new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String s) {
-                                Document doc = Jsoup.parse(s);
-                                if (!doc.select("center").text().isEmpty()) {
-                                    Element element = doc.select("center").select("img").first();
-                                    String imageUrl = element.attr("src");
-                                    System.out.println("imageUrl:" + imageUrl);
-                                    listImage.add(imageUrl);
-                                } else {
-                                    System.out.println("aa");
-                                    listImage.add("aa");
-                                }
-                                if (listImage.size() == 20) {
-                                    FragmentLGNews.lgAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                System.out.println("出错");
-                            }
-                        });
-                        VolleyRequest.addRequest(stringRequestIV, "LGImage");*/
-
-
-//                FragmentLGNews.lgAdapter.notifyDataSetChanged();
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                System.out.println("请求失败：" + volleyError.toString());
+            public void onFinish() {
+                mHandler.sendEmptyMessage(0);
             }
         });
-        VolleyRequest.addRequest(mStringRequest,"LGNews");
-    }
-    public void getImageData() {
-        for (int i = 0; i < listLink.size(); i++) {
-
-        }
     }
 
     @Override

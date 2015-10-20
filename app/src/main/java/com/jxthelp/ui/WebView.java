@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.jxthelp.R;
 import com.jxthelp.fragment.FragmentLGNews;
 import com.jxthelp.fragment.FragmentNews;
+import com.jxthelp.request.NewsRequest;
 import com.jxthelp.util.VolleyRequest;
 
 import org.jsoup.Jsoup;
@@ -30,13 +31,14 @@ import butterknife.InjectView;
 public class WebView extends BaseActivity {
     @InjectView(R.id.webView)
     android.webkit.WebView webView;
-    private String mUrl = MainActivity.listLink.get(FragmentLGNews.item);
+    private String mUrl;
     private static Elements elements1;
     private static Elements elements2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUrl = NewsRequest.newsList.get(FragmentLGNews.item).getUrl();
         setContentView(R.layout.web_view);
         ButterKnife.inject(this);
         StringRequest mStringRequest = new StringRequest("http://www.jxust.cn" + mUrl, new Response.Listener<String>() {

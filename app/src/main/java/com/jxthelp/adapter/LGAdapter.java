@@ -15,55 +15,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.StringRequest;
 import com.jxthelp.App;
 import com.jxthelp.R;
 import com.jxthelp.api.GetUrl;
-import com.jxthelp.cache.BitmapCache;
+import com.jxthelp.bean.News;
 import com.jxthelp.cache.ImageCacheManager;
 import com.jxthelp.fragment.FragmentLGNews;
-import com.jxthelp.ui.MainActivity;
+import com.jxthelp.request.Listener;
+import com.jxthelp.request.NewsRequest;
 import com.jxthelp.util.DensityUtils;
-import com.jxthelp.util.HttpUtils;
-import com.jxthelp.util.VolleyRequest;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by idisfkj on 15/10/18.
  * Email : idisfkj@qq.com.
  */
 public class LGAdapter extends BaseAdapter {
-    private List<String> listTitle = MainActivity.listTitle;
-    private List<String> listLink =MainActivity.listLink;
-    private List<String> listImage=MainActivity.listImage;
-    private List<String> listDate=MainActivity.listDate;
     private int count=2;
     private Drawable drawable;
     @Override
     public int getCount() {
-        return listTitle.size();
+        return NewsRequest.newsList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return listTitle.get(i);
+        return NewsRequest.newsList.get(i);
     }
 
     @Override
@@ -85,8 +62,9 @@ public class LGAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.textView.setText(listTitle.get(i));
-        viewHolder.date.setText("日期:"+listDate.get(i));
+        News news = NewsRequest.newsList.get(i);
+        viewHolder.textView.setText(news.getTitle());
+        viewHolder.date.setText("日期:"+news.getDate());
         DisplayImageOptions options=new DisplayImageOptions.Builder()
                 .cacheOnDisc(false)//设置下载的图片是否缓存在SD卡中
                 .considerExifParams(true)//是否考虑JPEG图像EXIF参数（旋转，翻转）
@@ -105,7 +83,7 @@ public class LGAdapter extends BaseAdapter {
                 .build();*/
 //               ImageLoader.getInstance().displayImage(GetUrl.ImageUrl + listImage.get(i), viewHolder.newsIv, options);
         drawable=new ColorDrawable(App.getContext().getResources().getColor(R.color.title_kc));
-        viewHolder.imageContainer= ImageCacheManager.loadImage(GetUrl.ImageUrl+listImage.get(i),
+        viewHolder.imageContainer= ImageCacheManager.loadImage(GetUrl.ImageUrl+news.getImage(),
                 ImageCacheManager.getImageListener(viewHolder.newsIv,drawable,drawable),
                 DensityUtils.dip2px(App.getContext(),80), DensityUtils.dip2px(App.getContext(), 80));
         return view;
@@ -120,68 +98,21 @@ public class LGAdapter extends BaseAdapter {
             }
         }
     };
-    public void upDate(Response.Listener listener,Response.ErrorListener errorListener){
-        volleyRequest(listener,errorListener);
+    public void upDate(final Response.Listener listener,Response.ErrorListener errorListener){
         count=count+1;
-        System.out.println("count:-----------" + count);
-    }
-    public void volleyRequest(Response.Listener listener,Response.ErrorListener errorListener){
-        StringRequest stringRequest=new StringRequest(GetUrl.LGUrl+"-"+count, new Response.Listener<String>() {
+        NewsRequest.request(count, new Listener() {
             @Override
-            public void onResponse(String s) {
-                org.jsoup.nodes.Document doc = Jsoup.parse(s);
-                Elements elements = doc.select("li[class=frount1]").select("a[href]");
-                for (int i = 0; i < elements.size(); i++) {
-//                    System.out.println(i + ":  " + elements.get(i));
-//                    System.out.println(i + ": " + elements.get(i).attr("href"));
-                    String link=elements.get(i).attr("href");
-                    listLink.add(link);
+            public void onStart() {
 
-                    String text=elements.get(i).text();
-                    int index=text.indexOf("]");
-                    int index1=text.indexOf("[");
-                    String date=text.substring(index1+1,index);
-                    text=text.substring(index+1).trim();
-                    listTitle.add(text);
-                    listDate.add(date);
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for(int n=20*(count-2);n<listLink.size();n++){
-                            try {
-                                String a = HttpUtils.getHttp(GetUrl.ImageUrl + listLink.get(n), App.getHttpClient(),GetUrl.ImageUrl);
-                                Document doc1 = Jsoup.parse(a);
-                                if (!doc1.select("center").text().isEmpty()) {
-                                    Element element = doc1.select("center").select("img").first();
-                                    String imageUrl = element.attr("src");
-//                                    System.out.println("imageUrl:" + imageUrl);
-                                    listImage.add(imageUrl);
-                                } else {
-//                                    System.out.println("aa");
-                                    listImage.add("aa");
-                                }
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            if (listImage.size() == 20*(count-1)) {
-//                                FragmentLGNews.lgAdapter.notifyDataSetChanged();
-                                mHandler.sendEmptyMessage(0);
-                            }
-                        }
-                    }
-
-                }).start();
-//                FragmentLGNews.lgAdapter.notifyDataSetChanged();
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError volleyError) {
+            public void onFinish() {
+                mHandler.sendEmptyMessage(0);
 
             }
         });
-        VolleyRequest.addRequest(stringRequest, "LGNews");
+        System.out.println("count:-----------" + count);
     }
 
     public class ViewHolder {
