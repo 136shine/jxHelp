@@ -34,7 +34,7 @@ public class FragmentNews extends Fragment implements View.OnClickListener {
     HorizontalScrollView horizontal;
     @InjectView(R.id.news_viewpager)
     ViewPager newsViewpager;
-    private int current;
+    public static int current;
     private int avarWidth;
     private List<Fragment> list = new ArrayList<Fragment>();
     private List<TextView> listTV = new ArrayList<TextView>();
@@ -61,17 +61,14 @@ public class FragmentNews extends Fragment implements View.OnClickListener {
         String[] title = {"理工新闻", "校园传真", "媒体聚焦", "学术报告"};
         for (int i = 0; i < title.length; i++) {
             View view = LayoutInflater.from(App.getContext()).inflate(R.layout.news_title_item,null);
-            LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(avarWidth, ViewGroup.LayoutParams.MATCH_PARENT);
-            LinearLayout.LayoutParams ll1 = new LinearLayout.LayoutParams(avarWidth, ViewGroup.LayoutParams.MATCH_PARENT);
             TextView tv = (TextView) view.findViewById(R.id.news_title);
+            tv.setWidth(avarWidth);
             tv.setId(i);
             listTV.add(tv);
             TextView line = (TextView) view.findViewById(R.id.news_line);
-            ll1.topMargin=8;
-            line.setLayoutParams(ll1);
+            line.setWidth(avarWidth);
             listLine.add(line);
             tv.setText(title[i]);
-            tv.setLayoutParams(ll);
             hoNews.addView(view);
             tv.setOnClickListener(this);
         }
@@ -81,6 +78,8 @@ public class FragmentNews extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         for (int i = 0; i < listTV.size(); i++) {
             if (v.getId() == i) {
+                //防止点击不加载数据
+                current=i;
                 newsViewpager.setCurrentItem(i);
             }
         }
@@ -96,6 +95,7 @@ public class FragmentNews extends Fragment implements View.OnClickListener {
         @Override
         public void onPageSelected(int position) {
             current=position;
+            System.out.println("current:"+current);
             horizontal.smoothScrollTo(avarWidth/4*3*position,0);
             for (int i = 0; i < listTV.size(); i++) {
                 if (position == i) {

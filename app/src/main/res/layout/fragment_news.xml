@@ -37,9 +37,9 @@
     </HorizontalScrollView>
 
     <TextView
+        android:layout_marginTop="-1dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="-9dp"
         android:background="@color/title_kc" />
 
     <android.support.v4.view.ViewPager

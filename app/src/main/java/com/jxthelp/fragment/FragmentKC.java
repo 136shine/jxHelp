@@ -304,38 +304,42 @@ public class FragmentKC extends Fragment {
             System.out.println(year + "-" + (month + 1) + "-" + day);
             //month+1 可能是API默认原因月份要＋1
             calendar.setTime(sdf.parse(year + "-" + (month + 1) + "-" + day));
-            //判断学期
-            if (Integer.parseInt(xueQi.getXq()) == 1) {
-                //上半学期开学时间
-                calendar1.setTime(sdf.parse(xueQi.getXnUp() + "-9-6"));
-            } else {
-                //待确定下半学期开学时间
-                calendar1.setTime(sdf.parse(xueQi.getXnDown() + "-9-6"));
+            //判断学期 判空
+            if(xueQi!=null) {
+                if (Integer.parseInt(xueQi.getXq()) == 1) {
+                    //上半学期开学时间
+                    calendar1.setTime(sdf.parse(xueQi.getXnUp() + "-9-6"));
+                } else {
+                    //待确定下半学期开学时间
+                    calendar1.setTime(sdf.parse(xueQi.getXnDown() + "-9-6"));
+                }
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        int startWeek = calendar1.get(Calendar.WEEK_OF_YEAR);
-        int week = calendar.get(Calendar.WEEK_OF_YEAR);
-        //是否是跨年
-        if (week < startWeek) {
-            for (int i = 0; i < 8; i++) {
-                try {
-                    calendar.setTime(sdf.parse(xueQi.getXnUp() + "-12-" + (31 - i)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+        if(xueQi!=null) {
+            int startWeek = calendar1.get(Calendar.WEEK_OF_YEAR);
+            int week = calendar.get(Calendar.WEEK_OF_YEAR);
+            //是否是跨年
+            if (week < startWeek) {
+                for (int i = 0; i < 8; i++) {
+                    try {
+                        calendar.setTime(sdf.parse(xueQi.getXnUp() + "-12-" + (31 - i)));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    int total = calendar.get(Calendar.WEEK_OF_YEAR);
+                    //获得一年的总周数
+                    if (total > 1) {
+                        i = 8;
+                        //获取目前的周数
+                        Zs = total - startWeek + week;
+                    }
                 }
-                int total = calendar.get(Calendar.WEEK_OF_YEAR);
-                //获得一年的总周数
-                if (total > 1) {
-                    i = 8;
-                    //获取目前的周数
-                    Zs = total - startWeek + week;
-                }
+            } else {
+                //获取目前的周数
+                Zs = week - startWeek;
             }
-        } else {
-            //获取目前的周数
-            Zs = week - startWeek;
         }
         return Zs;
     }

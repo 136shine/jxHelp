@@ -17,4 +17,10 @@
     <color name="course_title">#e71e256b</color>
     <color name="news_title">#044df7</color>
     <color name="news_data">#8d000000</color>
+
+    <color name="holo_blue_dark">#ff0099cc</color>
+    <color name="holo_green_dark">#ff669900</color>
+    <color name="holo_red_dark">#ffcc0000</color>
+    <color name="holo_purple">#ffaa66cc</color>
+    <color name="holo_orange_light">#ffffbb33</color>
 </resources>

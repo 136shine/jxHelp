@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/news_text0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:ellipsize="end"
+        android:lines="3"
+        android:paddingTop="8dp"
+        android:text="a"
+        android:textColor="@color/title_kc1"
+        android:textSize="18sp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <TextView
+            android:textColor="@color/news_data"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/fb0"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="发布:党委宣传部" />
+        <TextView
+            android:textColor="@color/news_data"
+            android:textSize="12sp"
+            android:id="@+id/date0"
+            android:layout_marginBottom="2dp"
+            android:layout_toRightOf="@id/fb0"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+</LinearLayout>
