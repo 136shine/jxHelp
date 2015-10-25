@@ -3,6 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <RelativeLayout
+        android:background="@color/title_kc"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    <ImageButton
+        android:id="@+id/web_back"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/back_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/web_title"
+        android:textColor="@color/course_title"
+        android:textSize="25sp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/course_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp" />
+    </RelativeLayout>
+    <TextView
+        android:padding="10dp"
+        android:textColor="@color/title_kc1"
+        android:textSize="18sp"
+        android:id="@+id/news_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <WebView
         android:id="@+id/webView"

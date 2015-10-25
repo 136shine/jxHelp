@@ -10,6 +10,16 @@ public class News {
     private String title;
     private String date;
     private String image;
+    private String fb;
+    private int tag;
+
+    public String getFb() {
+        return fb;
+    }
+
+    public void setFb(String fb) {
+        this.fb = fb;
+    }
 
     public String getUrl() {
         return url;
@@ -43,6 +53,14 @@ public class News {
         this.image = image;
     }
 
+    public int getTag() {
+        return tag;
+    }
+
+    public void setTag(int tag) {
+        this.tag = tag;
+    }
+
     @Override
     public String toString() {
         return "News{" +
@@ -50,6 +68,8 @@ public class News {
                 ", title='" + title + '\'' +
                 ", date='" + date + '\'' +
                 ", image='" + image + '\'' +
+                ", fb='" + fb + '\'' +
+                ", tag=" + tag +
                 '}';
     }
 }

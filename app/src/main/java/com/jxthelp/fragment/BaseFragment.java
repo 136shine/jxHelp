@@ -1,6 +1,5 @@
 package com.jxthelp.fragment;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 /**
@@ -8,4 +7,5 @@ import android.support.v4.app.Fragment;
  * Email: idisfkj@qq.com
  */
 public class BaseFragment extends Fragment {
+
 }

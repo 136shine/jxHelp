@@ -51,11 +51,10 @@ public class MainActivity extends BaseActivity {
     private DrawerLayout drawerLayout;
     private FragmentTabHost mFragmentTabHost;
     private LayoutInflater mLayoutInflater;
-    private String[] fragmentName={"新闻","课程","用户"};
-    private Class fragmentArray[]={FragmentNews.class, FragmentKC.class, FragmentTest.class};
+    private String[] fragmentName = {"新闻", "课程", "用户"};
+    private Class fragmentArray[] = {FragmentNews.class, FragmentKC.class, FragmentTest.class};
     private ImageView imageView;
     private TextView textView;
-    private boolean isFirst=true;
     //long
     private long mExitTime;
 
@@ -63,21 +62,16 @@ public class MainActivity extends BaseActivity {
     public static int width;
     public static int height;
 
-    public static List<String> listLink = new ArrayList<String>();
-    public static List<String> listTitle = new ArrayList<String>();
-    public static List<String> listImage=new ArrayList<String>();
-    public static List<String> listDate=new ArrayList<String>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        displayMetrics =new DisplayMetrics();
+        displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        width=displayMetrics.widthPixels;
-        height=displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+        height = displayMetrics.heightPixels;
 
-        View view=findViewById(R.id.drawer_main);
+        View view = findViewById(R.id.drawer_main);
         initTabView(view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerActionBar = new DrawerActionBar(this, drawerLayout, R.string.draweropen, R.string.drawer_close) {
@@ -94,38 +88,26 @@ public class MainActivity extends BaseActivity {
         drawerLayout.setDrawerListener(drawerActionBar);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.left_layout, new DrawerFragment()).commit();
-        getData();
-//        getImageData();
     }
-    private Handler mHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case 0:FragmentLGNews.lgAdapter.notifyDataSetChanged();
-                    break;
 
-            }
-        }
-    };
-
-    public void initTabView(View view){
-        mLayoutInflater=LayoutInflater.from(this);
+    public void initTabView(View view) {
+        mLayoutInflater = LayoutInflater.from(this);
         //找到tabHost
         mFragmentTabHost = (FragmentTabHost) view.findViewById(android.R.id.tabhost);
+        //布局到Drawelayout上
         mFragmentTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-        for(int i=0;i<fragmentName.length;i++){
+        for (int i = 0; i < fragmentName.length; i++) {
             // 给每个Tab按钮设置图标和内容
-            TabHost.TabSpec tabSpec=mFragmentTabHost.newTabSpec(fragmentName[i]).setIndicator(getTabView(i));
+            TabHost.TabSpec tabSpec = mFragmentTabHost.newTabSpec(fragmentName[i]).setIndicator(getTabView(i));
             // 将Tab按钮添加进Tab选项卡中
             mFragmentTabHost.addTab(tabSpec, fragmentArray[i], null);
         }
         //第一次进入改变默认第一个tab的颜色
-        TextView tv= (TextView) mFragmentTabHost.getTabWidget().getChildAt(0).findViewById(R.id.tab_text);
+        TextView tv = (TextView) mFragmentTabHost.getTabWidget().getChildAt(0).findViewById(R.id.tab_text);
         tv.setTextColor(getResources().getColor(R.color.drawer_text));
 
         //去除FragmentTabHost分割线
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.GINGERBREAD_MR1){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
             mFragmentTabHost.getTabWidget().setShowDividers(0);
         }
         //tab改变时事件
@@ -137,51 +119,47 @@ public class MainActivity extends BaseActivity {
         });
 
     }
-    public View getTabView(int i){
-        View view=mLayoutInflater.inflate(R.layout.tab_item, null);
-        imageView= (ImageView) view.findViewById(R.id.tab_image);
+
+    public View getTabView(int i) {
+        View view = mLayoutInflater.inflate(R.layout.tab_item, null);
+        imageView = (ImageView) view.findViewById(R.id.tab_image);
         textView = (TextView) view.findViewById(R.id.tab_text);
-        switch (i){
-            case 0:imageView.setImageResource(R.drawable.news_bg);break;
-            case 1:imageView.setImageResource(R.drawable.kc_bg);break;
-            case 2:imageView.setImageResource(R.drawable.user_bg);break;
+        switch (i) {
+            case 0:
+                imageView.setImageResource(R.drawable.news_bg);
+                break;
+            case 1:
+                imageView.setImageResource(R.drawable.kc_bg);
+                break;
+            case 2:
+                imageView.setImageResource(R.drawable.user_bg);
+                break;
         }
         textView.setText(fragmentName[i]);
         return view;
     }
+
     //更改tab的颜色
-    public void updateTab(FragmentTabHost tabHost){
-        for(int i=0;i<tabHost.getTabWidget().getChildCount();i++){
-            View view=tabHost.getTabWidget().getChildAt(i);
+    public void updateTab(FragmentTabHost tabHost) {
+        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+            View view = tabHost.getTabWidget().getChildAt(i);
             TextView tv = (TextView) view.findViewById(R.id.tab_text);
-            if(tabHost.getCurrentTab()==i) {
+            if (tabHost.getCurrentTab() == i) {
                 tv.setTextColor(getResources().getColor(R.color.drawer_text));
-            }else {
+            } else {
                 tv.setTextColor(getResources().getColor(R.color.tab_text));
             }
 
         }
 
     }
-    public void getData(){
-        NewsRequest.request(1, new Listener() {
-            @Override
-            public void onStart() {
 
-            }
-
-            @Override
-            public void onFinish() {
-                mHandler.sendEmptyMessage(0);
-            }
-        });
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode==KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             //防止按一次退出
-            if (System.currentTimeMillis() - mExitTime >2000) {
+            if (System.currentTimeMillis() - mExitTime > 2000) {
                 ToastUtils.showShort("再按一次回到桌面");
                 mExitTime = System.currentTimeMillis();
             } else {
@@ -196,11 +174,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        listTitle.clear();
-        listLink.clear();
-        listImage.clear();
-        VolleyRequest.cancelAll("LGNews");
-
+        for(int i=0;i<4;i++) {
+            VolleyRequest.cancelAll("News" +i);
+        }
     }
 
     @Override

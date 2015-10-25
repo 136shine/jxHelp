@@ -7,4 +7,5 @@ public interface Listener {
 
     public void onStart();
     public void onFinish();
+    public void onError();
 }

@@ -32,6 +32,7 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -126,13 +127,12 @@ public class LoginActivity extends BaseActivity {
 
                 if (postSuccess()) {
                     try {
-
                         kc = HttpUtils.getHttp(url2 + user + "&xm=" + xm + "&gnmkdm=N122303", App.getHttpClient(), url3 + user);
-//                        System.out.println("kc----------:" + kc);
+                        System.out.println("kc----------:" + kc);
                         //解析
 
 
-                        org.jsoup.nodes.Document doc = Jsoup.parse(kc);
+                        Document doc = Jsoup.parse(kc);
 
                         //获取学期
                         Elements elementsXQ = doc.select("option[selected]");
@@ -165,8 +165,8 @@ public class LoginActivity extends BaseActivity {
                                     int m = k + 1;
                                     System.out.println("星期：" + m);
                                     data.setXinQi(m);
-                                    //获取第一个font数据
-                                    String contents = values.get(k).select("font").first().text();
+                                    //获取第一个<td></td>数据
+                                    String contents = values.get(k).select("td").first().text();
                                     String[] value = contents.split(" ");
                                     data.setCourseName(value[0]);
                                     data.setCourseRoom(value[3]);
@@ -177,7 +177,12 @@ public class LoginActivity extends BaseActivity {
                                     int index4 = value[1].indexOf("单");
                                     int index5 = value[1].indexOf("双");
                                     data.setStart(Integer.parseInt(value[1].substring(0, index1)));
-                                    data.setEnd(Integer.parseInt(value[1].substring(index1 + 1, index2)));
+                                    //判断是否有单双 设置结束周
+                                    if(index4!=-1||index5!=-1){
+                                        data.setEnd(Integer.parseInt(value[1].substring(index1+1,index2-1)));
+                                    }else {
+                                        data.setEnd(Integer.parseInt(value[1].substring(index1 + 1, index2)));
+                                    }
                                     data.setClassNumber(Integer.parseInt(value[1].substring(index2 + 1, index3)));
                                     if (index4 == -1 && index5 == -1) {
                                         data.setFlag(-1);

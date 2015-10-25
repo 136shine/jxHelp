@@ -28,6 +28,14 @@ import java.util.Objects;
 public class App extends Application {
     private static Context mContext;
     private static DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
+    public static int page=2;
+    public static int XYPAGE=2;
+    public static int MTPAGE=2;
+    public static int XSPAGE=2;
+    public static boolean lgIsFirstLoad=true;
+    public static boolean xyIsFirstLoad=true;
+    public static boolean mtIsFirstLoad=true;
+    public static boolean xsIsFirstLoad=true;
 
     @Override
     public void onCreate() {
