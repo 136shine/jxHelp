@@ -93,6 +93,30 @@ public class WebView extends SwipeBackActivity implements View.OnClickListener {
                 webFb.setText(NewsRequest.XSNewsList.get(i).getFb());
                 webData.setText("日期："+NewsRequest.XSNewsList.get(i).getDate());
                 break;
+            case 4:
+                mUrl = NewsRequest.XXNewsList.get(i).getUrl();
+                webTitle.setText("学校公告");
+                NewsTitle=NewsRequest.XXNewsList.get(i).getTitle();
+                newsTitle.setText(NewsTitle);
+                webFb.setText(NewsRequest.XXNewsList.get(i).getFb());
+                webData.setText("日期："+NewsRequest.XXNewsList.get(i).getDate());
+                break;
+            case 5:
+                mUrl = NewsRequest.ZBNewsList.get(i).getUrl();
+                webTitle.setText("招标公告");
+                NewsTitle=NewsRequest.ZBNewsList.get(i).getTitle();
+                newsTitle.setText(NewsTitle);
+                webFb.setText(NewsRequest.ZBNewsList.get(i).getFb());
+                webData.setText("日期："+NewsRequest.ZBNewsList.get(i).getDate());
+                break;
+            case 6:
+                mUrl = NewsRequest.ZPNewsList.get(i).getUrl();
+                webTitle.setText("校园招聘");
+                NewsTitle=NewsRequest.ZPNewsList.get(i).getTitle();
+                newsTitle.setText(NewsTitle);
+                webFb.setText(NewsRequest.ZPNewsList.get(i).getFb());
+                webData.setText("日期："+NewsRequest.ZPNewsList.get(i).getDate());
+                break;
 
         }
         webBack.setOnClickListener(this);

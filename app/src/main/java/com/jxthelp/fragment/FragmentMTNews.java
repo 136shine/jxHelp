@@ -21,6 +21,7 @@ import com.jxthelp.adapter.MTAdapter;
 import com.jxthelp.dialog.MyDialog;
 import com.jxthelp.request.Listener;
 import com.jxthelp.request.NewsRequest;
+import com.jxthelp.ui.MainActivity;
 import com.jxthelp.ui.WebView;
 import com.jxthelp.util.ToastUtils;
 import com.jxthelp.util.VolleyRequest;
@@ -46,14 +47,12 @@ public class FragmentMTNews extends Fragment implements View.OnClickListener, Sw
 
     public static MTAdapter mtAdapter;
     private boolean isFirst=true;
-    private MyDialog pd;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mt_news, null);
         ButterKnife.inject(this, view);
-
         fab.attachToListView(mtList);
         fab.setType(FloatingActionButton.TYPE_MINI);
         fab.setColorNormal(getResources().getColor(R.color.holo_purple));
@@ -97,8 +96,6 @@ public class FragmentMTNews extends Fragment implements View.OnClickListener, Sw
         swipe.setColorSchemeResources(R.color.holo_blue_dark, R.color.holo_green_dark
                 , R.color.holo_orange_light, R.color.holo_purple, R.color.holo_red_dark);
         swipe.setOnRefreshListener(this);
-//        if (App.mtIsFirstLoad)
-//            getData();
         System.out.println("mt:"+App.mtIsFirstLoad);
         System.out.println("mt");
         return view;
@@ -171,7 +168,7 @@ public class FragmentMTNews extends Fragment implements View.OnClickListener, Sw
             @Override
             public void onFinish() {
                 if (App.mtIsFirstLoad)
-                pd.cancel();
+                FragmentNews.pd.cancel();
                 App.mtIsFirstLoad = false;
                 mHandler.sendEmptyMessage(4);
                 if (!isFirst)
@@ -183,7 +180,7 @@ public class FragmentMTNews extends Fragment implements View.OnClickListener, Sw
             @Override
             public void onError() {
                 if(App.mtIsFirstLoad)
-                    pd.cancel();
+                    FragmentNews.pd.cancel();
                 mHandler.sendEmptyMessage(4);
                 mHandler.sendEmptyMessage(1);
             }
@@ -193,10 +190,9 @@ public class FragmentMTNews extends Fragment implements View.OnClickListener, Sw
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        System.out.println("SET");
         if(App.mtIsFirstLoad&&FragmentNews.current==2){
-            pd=new MyDialog(getActivity());
-            pd.setCanceledOnTouchOutside(false);
-            pd.show();
+            FragmentNews.current=-1;
             getData();
         }
         super.setUserVisibleHint(isVisibleToUser);

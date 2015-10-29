@@ -10,7 +10,10 @@ import com.jxthelp.bean.News;
 import com.jxthelp.fragment.FragmentLGNews;
 import com.jxthelp.fragment.FragmentMTNews;
 import com.jxthelp.fragment.FragmentXSNews;
+import com.jxthelp.fragment.FragmentXXNews;
 import com.jxthelp.fragment.FragmentXYNews;
+import com.jxthelp.fragment.FragmentZBNews;
+import com.jxthelp.fragment.FragmentZPNews;
 import com.jxthelp.util.VolleyRequest;
 
 import org.jsoup.Jsoup;
@@ -33,6 +36,9 @@ public class NewsRequest {
     public static List<News> XYNewsList=new ArrayList<News>();
     public static List<News> MTNewsList=new ArrayList<News>();
     public static List<News> XSNewsList=new ArrayList<News>();
+    public static List<News> XXNewsList=new ArrayList<News>();
+    public static List<News> ZBNewsList=new ArrayList<News>();
+    public static List<News> ZPNewsList=new ArrayList<News>();
     public static boolean isOk = false;
     private static String Url;
     private static List<News> list=new ArrayList<News>();
@@ -55,6 +61,9 @@ public class NewsRequest {
                         case 1:mHandler.sendEmptyMessage(1);break;
                         case 2:mHandler.sendEmptyMessage(2);break;
                         case 3:mHandler.sendEmptyMessage(3);break;
+                        case 4:mHandler.sendEmptyMessage(4);break;
+                        case 5:mHandler.sendEmptyMessage(5);break;
+                        case 6:mHandler.sendEmptyMessage(6);break;
                     }
                     isOk = false;
                     System.out.println("finish");
@@ -79,6 +88,12 @@ public class NewsRequest {
                     FragmentMTNews.mtAdapter.notifyDataSetChanged();break;
                 case 3:
                     FragmentXSNews.xsAdapter.notifyDataSetChanged();break;
+                case 4:
+                    FragmentXXNews.xxAdapter.notifyDataSetChanged();break;
+                case 5:
+                    FragmentZBNews.zbAdapter.notifyDataSetChanged();break;
+                case 6:
+                    FragmentZPNews.zpAdapter.notifyDataSetChanged();break;
 
             }
         }
@@ -92,6 +107,9 @@ public class NewsRequest {
             case 1:Url=GetUrl.XYUrl;break;
             case 2:Url=GetUrl.MTUrl;break;
             case 3:Url=GetUrl.XSUrl;break;
+            case 4:Url=GetUrl.XXUrl;break;
+            case 5:Url=GetUrl.ZBUrl;break;
+            case 6:Url=GetUrl.ZPUrl;break;
         }
         StringRequest LGNewsListRequest = new StringRequest(Url + "-" + page, future, future);
         VolleyRequest.addRequest(LGNewsListRequest, "News"+n);
@@ -131,6 +149,12 @@ public class NewsRequest {
                         list=MTNewsList;break;
                     case 3:XSNewsList.add(news);
                         list=XSNewsList;break;
+                    case 4:XXNewsList.add(news);
+                        list=XXNewsList;break;
+                    case 5:ZBNewsList.add(news);
+                        list=ZBNewsList;break;
+                    case 6:ZPNewsList.add(news);
+                        list=ZPNewsList;break;
                 }
 
             }
