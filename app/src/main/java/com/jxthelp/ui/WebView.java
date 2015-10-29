@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.jxthelp.R;
+import com.jxthelp.bean.News;
 import com.jxthelp.dialog.MyDialog;
 import com.jxthelp.request.NewsRequest;
 import com.jxthelp.swipeback.SwipeBackActivity;
@@ -38,17 +39,22 @@ public class WebView extends SwipeBackActivity implements View.OnClickListener {
     TextView webTitle;
     @InjectView(R.id.news_title)
     TextView newsTitle;
+    @InjectView(R.id.web_fb)
+    TextView webFb;
+    @InjectView(R.id.web_data)
+    TextView webData;
     private String mUrl;
     private static Elements elements1;
     private static Element element;
     private MyDialog dialog;
+    private String NewsTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.web_view);
         ButterKnife.inject(this);
-        dialog=new MyDialog(this);
+        dialog = new MyDialog(this);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Intent intent = getIntent();
@@ -58,22 +64,34 @@ public class WebView extends SwipeBackActivity implements View.OnClickListener {
             case 0:
                 mUrl = NewsRequest.LGNewsList.get(i).getUrl();
                 webTitle.setText("理工新闻");
-                newsTitle.setText(NewsRequest.LGNewsList.get(i).getTitle());
+                NewsTitle=NewsRequest.LGNewsList.get(i).getTitle();
+                newsTitle.setText(NewsTitle);
+                webFb.setText(NewsRequest.LGNewsList.get(i).getFb());
+                webData.setText("日期："+NewsRequest.LGNewsList.get(i).getDate());
                 break;
             case 1:
                 mUrl = NewsRequest.XYNewsList.get(i).getUrl();
                 webTitle.setText("校园传真");
-                newsTitle.setText(NewsRequest.XYNewsList.get(i).getTitle());
+                NewsTitle=NewsRequest.XYNewsList.get(i).getTitle();
+                newsTitle.setText(NewsTitle);
+                webFb.setText(NewsRequest.XYNewsList.get(i).getFb());
+                webData.setText("日期："+NewsRequest.XYNewsList.get(i).getDate());
                 break;
             case 2:
                 mUrl = NewsRequest.MTNewsList.get(i).getUrl();
                 webTitle.setText("媒体聚焦");
-                newsTitle.setText(NewsRequest.MTNewsList.get(i).getTitle());
+                NewsTitle=NewsRequest.MTNewsList.get(i).getTitle();
+                newsTitle.setText(NewsTitle);
+                webFb.setText(NewsRequest.MTNewsList.get(i).getFb());
+                webData.setText("日期："+NewsRequest.MTNewsList.get(i).getDate());
                 break;
             case 3:
                 mUrl = NewsRequest.XSNewsList.get(i).getUrl();
                 webTitle.setText("学术公告");
-                newsTitle.setText(NewsRequest.XSNewsList.get(i).getTitle());
+                NewsTitle=NewsRequest.XSNewsList.get(i).getTitle();
+                newsTitle.setText(NewsTitle);
+                webFb.setText(NewsRequest.XSNewsList.get(i).getFb());
+                webData.setText("日期："+NewsRequest.XSNewsList.get(i).getDate());
                 break;
 
         }
@@ -86,9 +104,9 @@ public class WebView extends SwipeBackActivity implements View.OnClickListener {
                 elements1 = doc.select("center");
                 element = doc.select("p[style]").first();
 
-                webView.loadDataWithBaseURL("http://www.jxust.cn/", "<h3 style=\"color:#800000; font-size:30px\">" + NewsRequest.LGNewsList.get(i).getTitle()+"</h3>"+
-                        "<div style=\"word-break:break-all;font-size:25px\"><center>" + elements1.toString() +"</center>" +
-                                "<<p style=\"text-indent: 2em;\">"+element.toString() + "</p><ul style=\"margin-left: 50px;\">" +
+                webView.loadDataWithBaseURL("http://www.jxust.cn/", "<h3 style=\"color:#800000; font-size:30px\">" + NewsTitle + "</h3>" +
+                                "<div style=\"word-break:break-all;font-size:25px\"><center>" + elements1.toString() + "</center>" +
+                                "<<p style=\"text-indent: 2em;\">" + element.toString() + "</p><ul style=\"margin-left: 50px;\">" +
                                 "</ul></div>",
                         "text/html", "utf-8", null);
                 dialog.dismiss();
@@ -114,8 +132,8 @@ public class WebView extends SwipeBackActivity implements View.OnClickListener {
         settings.setBuiltInZoomControls(true);
         settings.setUseWideViewPort(true);//扩大比例的缩放
         //设置加载进来的页面自适应屏幕
-//        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
-        settings.setUseWideViewPort(true);
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+//        settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
     }
 

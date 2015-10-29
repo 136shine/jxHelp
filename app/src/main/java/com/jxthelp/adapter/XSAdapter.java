@@ -18,6 +18,8 @@ import com.jxthelp.cache.ImageCacheManager;
 import com.jxthelp.request.Listener;
 import com.jxthelp.request.NewsRequest;
 import com.jxthelp.util.DensityUtils;
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 
 /**
  * Created by idisfkj on 15/10/22.
@@ -51,7 +53,8 @@ public class XSAdapter extends BaseAdapter {
             viewHolder.date = (TextView) convertView.findViewById(R.id.date);
             viewHolder.newsIv = (ImageView) convertView.findViewById(R.id.news_iv);
             viewHolder.ll= (LinearLayout) convertView.findViewById(R.id.ll);
-            viewHolder.tag= (TextView) convertView.findViewById(R.id.top_tag);
+            viewHolder.tag= (ShimmerTextView) convertView.findViewById(R.id.top_tag);
+            new Shimmer().start(viewHolder.tag);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -81,7 +84,7 @@ public class XSAdapter extends BaseAdapter {
                 drawable = new ColorDrawable(App.getContext().getResources().getColor(R.color.title_kc));
                 viewHolder.imageContainer = ImageCacheManager.loadImage(GetUrl.ImageUrl + news.getImage(),
                         ImageCacheManager.getImageListener(viewHolder.newsIv, drawable, drawable),
-                        DensityUtils.dip2px(App.getContext(), 80), DensityUtils.dip2px(App.getContext(), 80));
+                        DensityUtils.dip2px(App.getContext(), 180), DensityUtils.dip2px(App.getContext(), 180));
             }
         }
         return convertView;
@@ -92,7 +95,7 @@ public class XSAdapter extends BaseAdapter {
         private ImageView newsIv;
         private TextView fb;
         private LinearLayout ll;
-        private TextView tag;
+        private ShimmerTextView tag;
         private com.android.volley.toolbox.ImageLoader.ImageContainer imageContainer;
     }
 
