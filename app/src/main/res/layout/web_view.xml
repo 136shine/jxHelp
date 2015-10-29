@@ -3,34 +3,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <RelativeLayout
-        android:background="@color/title_kc"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-    <ImageButton
-        android:id="@+id/web_back"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/back_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/web_title"
-        android:textColor="@color/course_title"
-        android:textSize="25sp"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="@string/course_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp" />
+        android:layout_height="50dp"
+        android:background="@color/title_kc">
+
+        <ImageButton
+            android:id="@+id/web_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/back_bg" />
+
+        <TextView
+            android:id="@+id/web_title"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/course_detail"
+            android:textColor="@color/course_title"
+            android:textSize="25sp" />
     </RelativeLayout>
+
     <TextView
-        android:padding="10dp"
-        android:textColor="@color/title_kc1"
-        android:textSize="18sp"
         android:id="@+id/news_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:textColor="@color/title_kc1"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/web_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="asdsadsa"
+            android:textColor="@color/title_kc1"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/web_data"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="asfadsf"
+            android:textColor="@color/title_kc1"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/title_kc1" />
 
     <WebView
         android:id="@+id/webView"

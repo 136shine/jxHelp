@@ -26,7 +26,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="30dp">
-            <TextView
+            <com.romainpiel.shimmer.ShimmerTextView
                 android:textColor="@color/holo_red_dark"
                 android:visibility="visible"
                 android:gravity="center"
