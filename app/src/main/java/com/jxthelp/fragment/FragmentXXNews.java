@@ -17,7 +17,7 @@ import android.widget.ListView;
 import com.jxthelp.App;
 import com.jxthelp.R;
 import com.jxthelp.adapter.CardsAnimationAdapter;
-import com.jxthelp.adapter.XYAdapter;
+import com.jxthelp.adapter.XXAdapter;
 import com.jxthelp.dialog.MyDialog;
 import com.jxthelp.request.Listener;
 import com.jxthelp.request.NewsRequest;
@@ -31,43 +31,43 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by idisfkj on 15/10/17.
+ * Created by idisfkj on 15/10/29.
  * Email : idisfkj@qq.com.
  */
-public class FragmentXYNews extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class FragmentXXNews extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     @InjectView(R.id.lg_list)
-    ListView xyList;
+    ListView xxList;
     @InjectView(R.id.swipe)
     SwipeRefreshLayout swipe;
     @InjectView(R.id.fab)
     FloatingActionButton fab;
-    private View lodaView;
 
-    public static XYAdapter xyAdapter;
+    public static XXAdapter xxAdapter;
+    private View lodaView;
     private int lastItem;
-    private boolean isFirst = true;
+    private boolean isFirst=true;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.xy_news, null);
+        View view = inflater.inflate(R.layout.xx_news, null);
         ButterKnife.inject(this, view);
-        fab.attachToListView(xyList);
+        fab.attachToListView(xxList);
         fab.setType(FloatingActionButton.TYPE_MINI);
         fab.setColorNormal(getResources().getColor(R.color.holo_purple));
         fab.setColorPressed(getResources().getColor(R.color.holo_blue_dark));
         fab.setShadow(false);
         fab.setOnClickListener(this);
-        xyAdapter = new XYAdapter();
-        AnimationAdapter animationxyAdapter = new CardsAnimationAdapter(xyAdapter);
-        animationxyAdapter.setAbsListView(xyList);
+        xxAdapter = new XXAdapter();
+        AnimationAdapter animationAdapter = new CardsAnimationAdapter(xxAdapter);
+        animationAdapter.setAbsListView(xxList);
         lodaView = getLayoutInflater(savedInstanceState).inflate(R.layout.loda_tv, null);
-        xyList.addFooterView(lodaView);
-        xyList.setAdapter(animationxyAdapter);
-        xyList.setOnScrollListener(new AbsListView.OnScrollListener() {
+        xxList.addFooterView(lodaView);
+        xxList.setAdapter(animationAdapter);
+        xxList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (lastItem == xyAdapter.getCount() && scrollState == this.SCROLL_STATE_IDLE) {
+                if (lastItem == xxAdapter.getCount() && scrollState == this.SCROLL_STATE_IDLE) {
                     lodaView.setVisibility(View.VISIBLE);
                     handler.sendEmptyMessage(0);
                 }
@@ -76,14 +76,14 @@ public class FragmentXYNews extends Fragment implements View.OnClickListener, Sw
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 lastItem = firstVisibleItem + visibleItemCount - 1;
-                if (xyAdapter.getItemId(firstVisibleItem) > 10) {
+                if (xxAdapter.getItemId(firstVisibleItem) > 10) {
                     fab.show();
                 } else {
                     fab.hide();
                 }
             }
         });
-        xyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        xxList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), WebView.class);
@@ -95,9 +95,6 @@ public class FragmentXYNews extends Fragment implements View.OnClickListener, Sw
         swipe.setColorSchemeResources(R.color.holo_blue_dark, R.color.holo_green_dark
                 , R.color.holo_orange_light, R.color.holo_purple, R.color.holo_red_dark);
         swipe.setOnRefreshListener(this);
-        System.out.println("xy:" + App.xyIsFirstLoad);
-        System.out.println("xy");
-
         return view;
     }
 
@@ -113,7 +110,7 @@ public class FragmentXYNews extends Fragment implements View.OnClickListener, Sw
                     ToastUtils.showShort("网络异常");
                     break;
                 case 2:
-                    xyAdapter.notifyDataSetChanged();
+                    xxAdapter.notifyDataSetChanged();
                     break;
                 case 3:
                     ToastUtils.showShort("刷新成功");
@@ -131,8 +128,8 @@ public class FragmentXYNews extends Fragment implements View.OnClickListener, Sw
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
-                    xyList.setSelection(xyAdapter.getCount());
-                    xyAdapter.upDate(new Listener() {
+                    xxList.setSelection(xxAdapter.getCount());
+                    xxAdapter.upDate(new Listener() {
                         @Override
                         public void onStart() {
 
@@ -167,9 +164,9 @@ public class FragmentXYNews extends Fragment implements View.OnClickListener, Sw
 
             @Override
             public void onFinish() {
-                if (App.xyIsFirstLoad)
+                if (App.xxIsFirstLoad)
                     FragmentNews.pd.cancel();
-                App.xyIsFirstLoad = false;
+                App.xxIsFirstLoad = false;
                 mHandler.sendEmptyMessage(4);
                 if (!isFirst)
                     mHandler.sendEmptyMessage(3);
@@ -179,18 +176,18 @@ public class FragmentXYNews extends Fragment implements View.OnClickListener, Sw
 
             @Override
             public void onError() {
-                if(App.xyIsFirstLoad)
+                if(App.xxIsFirstLoad)
                     FragmentNews.pd.cancel();
                 mHandler.sendEmptyMessage(4);
                 mHandler.sendEmptyMessage(1);
             }
 
-        }, 1);
+        }, 4);
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (App.xyIsFirstLoad && FragmentNews.current == 1) {
+        if (App.xxIsFirstLoad && FragmentNews.current == 4) {
             FragmentNews.current=-1;
             getData();
         }
@@ -205,15 +202,15 @@ public class FragmentXYNews extends Fragment implements View.OnClickListener, Sw
 
     @Override
     public void onClick(View v) {
-        xyList.setSelection(0);
+        xxList.setSelection(0);
         fab.show();
     }
 
     @Override
     public void onRefresh() {
-        App.XYPAGE = 2;
-        VolleyRequest.cancelAll("Image" + 1);
-        NewsRequest.XYNewsList.clear();
+        App.XXPAGE = 2;
+        VolleyRequest.cancelAll("Image" + 4);
+        NewsRequest.XXNewsList.clear();
         getData();
     }
 }

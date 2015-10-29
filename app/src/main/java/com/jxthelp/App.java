@@ -33,10 +33,16 @@ public class App extends Application {
     public static int XYPAGE=2;
     public static int MTPAGE=2;
     public static int XSPAGE=2;
+    public static int XXPAGE=2;
+    public static int ZBPAGE=2;
+    public static int ZPPAGE=2;
     public static boolean lgIsFirstLoad=true;
     public static boolean xyIsFirstLoad=true;
     public static boolean mtIsFirstLoad=true;
     public static boolean xsIsFirstLoad=true;
+    public static boolean xxIsFirstLoad=true;
+    public static boolean zbIsFirstLoad=true;
+    public static boolean zpIsFirstLoad=true;
 
     @Override
     public void onCreate() {

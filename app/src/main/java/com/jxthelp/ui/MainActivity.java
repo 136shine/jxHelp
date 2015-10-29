@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
     private DrawerLayout drawerLayout;
     private FragmentTabHost mFragmentTabHost;
     private LayoutInflater mLayoutInflater;
-    private String[] fragmentName = {"新闻", "课程", "用户"};
+    private String[] fragmentName = {"新闻", "课程", "视频"};
     private Class fragmentArray[] = {FragmentNews.class, FragmentKC.class, FragmentTest.class};
     private ImageView imageView;
     private TextView textView;
