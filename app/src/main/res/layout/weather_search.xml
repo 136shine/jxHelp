@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_kc">
+
+        <ImageButton
+            android:id="@+id/weather_setting_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/back_bg" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/weather_setting"
+            android:textColor="@color/course_title"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/weather_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/ic_setting"
+                android:id="@+id/setting_iv"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+            <EditText
+                android:singleLine="true"
+                android:background="@null"
+                android:layout_toRightOf="@id/setting_iv"
+                android:id="@+id/setting_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:hint="请输入要设置的城市" />
+        </RelativeLayout>
+
+
+
+        <Button
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/setting_bt"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@drawable/weather_setting_button"
+            android:text="@string/setting"
+            android:textColor="@color/title_kc1"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

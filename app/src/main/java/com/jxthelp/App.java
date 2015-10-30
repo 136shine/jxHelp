@@ -43,6 +43,7 @@ public class App extends Application {
     public static boolean xxIsFirstLoad=true;
     public static boolean zbIsFirstLoad=true;
     public static boolean zpIsFirstLoad=true;
+    public static String CITY="赣州";
 
     @Override
     public void onCreate() {

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_kc">
+
+        <TextView
+            android:id="@+id/weather_title"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="赣州"
+            android:textColor="@color/course_title"
+            android:textSize="25sp" />
+
+        <ImageButton
+            android:id="@+id/setting"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/setting_bg" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/wea_bg">
+
+        <RelativeLayout
+            android:id="@+id/tag"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="30℃"
+                android:textSize="55sp" />
+
+            <TextView
+                android:id="@+id/weather"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/temperature"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="小雨"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/pm"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="30dp"
+                android:gravity="center"
+                android:text="21"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/pm25"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_toLeftOf="@id/pm"
+                android:gravity="center"
+                android:text="pm25:"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/wind"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/weather"
+                android:layout_marginLeft="22dp"
+                android:gravity="center_vertical"
+                android:text="微风"
+                android:textSize="30sp" />
+
+            <TextView
+                android:gravity="center_vertical"
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/wind"
+                android:layout_marginLeft="22dp"
+                android:text="穿衣"
+                android:textSize="20sp" />
+
+            <TextView
+                android:gravity="center_vertical"
+                android:id="@+id/zs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/wind"
+                android:layout_marginLeft="62dp"
+                android:layout_toRightOf="@id/title"
+                android:text="舒适"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/title"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tipt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/title"
+                    android:layout_marginLeft="22dp"
+                    android:gravity="center_vertical"
+                    android:text="穿衣指数"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:id="@+id/des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@id/tipt"
+                    android:ellipsize="end"
+                    android:lines="3"
+                    android:text="建议着长袖T恤、衬衫加单裤等服装。年老体弱者宜着针织长袖衬衫、马甲和长裤"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#00000000"
+                android:dividerHeight="2dp"
+                android:padding="5dp"
+                android:scrollbars="none">
+
+            </ListView>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
