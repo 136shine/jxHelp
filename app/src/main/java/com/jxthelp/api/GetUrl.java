@@ -13,4 +13,7 @@ public class GetUrl {
     public static String XXUrl="http://www.jxust.cn/list/12";
     public static String ZBUrl="http://www.jxust.cn/list/13";
     public static String ZPUrl="http://www.jxust.cn/list/17";
+    public static String WEATHERUrl1="http://api.map.baidu.com/telematics/v3/weather?location=";
+    public static String WEATHERUrl2="&output=xml&ak=eT3fBLMwyKuAMebeQUHUCOi6";
 }
+

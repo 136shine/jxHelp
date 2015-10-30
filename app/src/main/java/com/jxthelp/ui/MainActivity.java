@@ -2,8 +2,6 @@ package com.jxthelp.ui;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
@@ -11,50 +9,28 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.jxthelp.App;
 import com.jxthelp.R;
-import com.jxthelp.api.GetUrl;
 import com.jxthelp.drawer.DrawerActionBar;
 import com.jxthelp.fragment.DrawerFragment;
 import com.jxthelp.fragment.FragmentKC;
-import com.jxthelp.fragment.FragmentLGNews;
 import com.jxthelp.fragment.FragmentNews;
-import com.jxthelp.fragment.FragmentTest;
-import com.jxthelp.request.Listener;
-import com.jxthelp.request.NewsRequest;
-import com.jxthelp.util.HttpUtils;
+import com.jxthelp.fragment.FragmentWeather;
 import com.jxthelp.util.ToastUtils;
 import com.jxthelp.util.VolleyRequest;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private DrawerActionBar drawerActionBar;
     private DrawerLayout drawerLayout;
     private FragmentTabHost mFragmentTabHost;
     private LayoutInflater mLayoutInflater;
-    private String[] fragmentName = {"新闻", "课程", "视频"};
-    private Class fragmentArray[] = {FragmentNews.class, FragmentKC.class, FragmentTest.class};
+    private String[] fragmentName = {"新闻", "课程", "天气"};
+    private Class fragmentArray[] = {FragmentNews.class, FragmentKC.class, FragmentWeather.class};
     private ImageView imageView;
     private TextView textView;
     //long
@@ -136,7 +112,7 @@ public class MainActivity extends BaseActivity {
                 imageView.setImageResource(R.drawable.kc_bg);
                 break;
             case 2:
-                imageView.setImageResource(R.drawable.user_bg);
+                imageView.setImageResource(R.drawable.weather_bg);
                 break;
         }
         textView.setText(fragmentName[i]);

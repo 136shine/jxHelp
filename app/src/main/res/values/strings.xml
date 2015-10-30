@@ -28,4 +28,10 @@
     <string name="xs_news">学术报告</string>
     <string name="news_title">校园资讯</string>
     <string name="loda_text">正在拼命加载。。。</string>
+    <string name="weather">天气</string>
+    <string name="weather_tag_title">温馨提示</string>
+    <string name="weather_search">天气查询</string>
+    <string name="weather_setting">天气设置 </string>
+    <string name="search">查询</string>
+    <string name="setting">设置</string>
 </resources>
