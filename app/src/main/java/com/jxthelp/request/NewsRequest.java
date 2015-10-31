@@ -114,6 +114,10 @@ public class NewsRequest {
         StringRequest LGNewsListRequest = new StringRequest(Url + "-" + page, future, future);
         VolleyRequest.addRequest(LGNewsListRequest, "News"+n);
 
+        // 将新数据存储在临时列表中，最终加入到对应list里面，防止出现如下异常：
+        // java.lang.IllegalStateException: The content of the adapter has changed but ListView ...
+        List<News> newNewsList = new ArrayList<News>();
+
         try {
             String LGNewsListResult = future.get(30, TimeUnit.SECONDS);
             if (LGNewsListResult.length()==12924) {
@@ -140,21 +144,29 @@ public class NewsRequest {
                 text = text.substring(index + 1).trim();
                 news.setTitle(text);
                 news.setDate(date);
+                newNewsList.add(news);
                 switch (n){
-                    case 0:LGNewsList.add(news);
-                        list=LGNewsList;break;
-                    case 1:XYNewsList.add(news);
-                        list=XYNewsList;break;
-                    case 2:MTNewsList.add(news);
-                        list=MTNewsList;break;
-                    case 3:XSNewsList.add(news);
-                        list=XSNewsList;break;
-                    case 4:XXNewsList.add(news);
-                        list=XXNewsList;break;
-                    case 5:ZBNewsList.add(news);
-                        list=ZBNewsList;break;
-                    case 6:ZPNewsList.add(news);
-                        list=ZPNewsList;break;
+                    case 0:
+                        list=LGNewsList;
+                        break;
+                    case 1:
+                        list=XYNewsList;
+                        break;
+                    case 2:
+                        list=MTNewsList;
+                        break;
+                    case 3:
+                        list=XSNewsList;
+                        break;
+                    case 4:
+                        list=XXNewsList;
+                        break;
+                    case 5:
+                        list=ZBNewsList;
+                        break;
+                    case 6:
+                        list=ZPNewsList;
+                        break;
                 }
 
             }
@@ -170,10 +182,7 @@ public class NewsRequest {
         }
 
         // 同步请求图片
-        for (int i = 20 * (page - 1); i < list.size(); i++) {
-
-            News news = list.get(i);
-            System.out.println(i + ":" + news);
+        for (News news:newNewsList) {
             future = RequestFuture.newFuture();
             StringRequest detailRequest = new StringRequest(GetUrl.ImageUrl + news.getUrl(), future, future);
             VolleyRequest.addRequest(detailRequest, "Image"+n);
@@ -212,5 +221,12 @@ public class NewsRequest {
             }
 
         }
+
+        // 第一页先清空数据
+        if(page==1){
+            list.clear();
+        }
+
+        list.addAll(newNewsList);
     }
 }

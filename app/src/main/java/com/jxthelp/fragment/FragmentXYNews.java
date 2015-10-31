@@ -213,7 +213,6 @@ public class FragmentXYNews extends Fragment implements View.OnClickListener, Sw
     public void onRefresh() {
         App.XYPAGE = 2;
         VolleyRequest.cancelAll("Image" + 1);
-        NewsRequest.XYNewsList.clear();
         getData();
     }
 }

@@ -215,7 +215,6 @@ public class FragmentXSNews extends Fragment implements View.OnClickListener, Sw
     public void onRefresh() {
         App.XSPAGE = 2;
         VolleyRequest.cancelAll("Image" + 3);
-        NewsRequest.XSNewsList.clear();
         getData();
     }
 }

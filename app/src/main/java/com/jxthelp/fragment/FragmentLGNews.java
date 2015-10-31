@@ -215,7 +215,6 @@ public class FragmentLGNews extends Fragment implements SwipeRefreshLayout.OnRef
     public void onRefresh() {
         App.page = 2;
         VolleyRequest.cancelAll("Image"+0);
-        NewsRequest.LGNewsList.clear();
         getData();
     }
 

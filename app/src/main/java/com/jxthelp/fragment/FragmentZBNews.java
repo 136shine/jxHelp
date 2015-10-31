@@ -209,7 +209,6 @@ public class FragmentZBNews extends Fragment implements View.OnClickListener, Sw
     public void onRefresh() {
         App.ZBPAGE = 2;
         VolleyRequest.cancelAll("Image" + 5);
-        NewsRequest.ZBNewsList.clear();
         getData();
     }
 }

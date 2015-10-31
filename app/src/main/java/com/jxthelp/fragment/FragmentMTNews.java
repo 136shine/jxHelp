@@ -214,7 +214,6 @@ public class FragmentMTNews extends Fragment implements View.OnClickListener, Sw
     public void onRefresh() {
         App.MTPAGE = 2;
         VolleyRequest.cancelAll("Image"+2);
-        NewsRequest.MTNewsList.clear();
         getData();
     }
 }

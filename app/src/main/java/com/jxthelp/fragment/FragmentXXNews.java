@@ -210,7 +210,6 @@ public class FragmentXXNews extends Fragment implements View.OnClickListener, Sw
     public void onRefresh() {
         App.XXPAGE = 2;
         VolleyRequest.cancelAll("Image" + 4);
-        NewsRequest.XXNewsList.clear();
         getData();
     }
 }

@@ -209,7 +209,6 @@ public class FragmentZPNews extends Fragment implements SwipeRefreshLayout.OnRef
     public void onRefresh() {
         App.ZPPAGE = 2;
         VolleyRequest.cancelAll("Image" + 6);
-        NewsRequest.ZPNewsList.clear();
         getData();
     }
 }
