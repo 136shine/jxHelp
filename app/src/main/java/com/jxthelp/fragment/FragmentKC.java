@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -23,14 +25,24 @@ import android.widget.TextView;
 
 import com.jxthelp.App;
 import com.jxthelp.R;
+import com.jxthelp.api.GetUrl;
 import com.jxthelp.bean.CourseInfo;
 import com.jxthelp.bean.XueQi;
 import com.jxthelp.ui.CourseDetail;
 import com.jxthelp.ui.LoginActivity;
 import com.jxthelp.ui.MainActivity;
+import com.jxthelp.util.HttpUtils;
+import com.jxthelp.util.ToastUtils;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -78,7 +90,7 @@ public class FragmentKC extends Fragment {
     private int height;
     private int zhouShu;
     private String[] zhou = new String[25];
-    private XueQi xueQi = MainActivity.xueQi;
+        private XueQi xueQi = MainActivity.xueQi;
     private Context mContext = App.getContext();
 
     private List<CourseInfo> list;
@@ -122,9 +134,6 @@ public class FragmentKC extends Fragment {
         empty.setTextColor(getResources().getColor(R.color.text_xiqi));
 
         spinner.setSelection(zhouShu - 1, true);
-//        getData(week-startWeek);
-
-
         return view;
     }
 
@@ -199,7 +208,7 @@ public class FragmentKC extends Fragment {
                         tv.setBackgroundResource(R.drawable.course_no_bg);
                     }
 
-                } else{
+                } else {
                     tv.setText("[非本周]" + "  " + list.get(i).getCourseName() + "  " + list.get(i).getCourseRoom());
                     tv.setBackgroundResource(R.drawable.course_no_bg);
                 }
@@ -305,7 +314,7 @@ public class FragmentKC extends Fragment {
             //month+1 可能是API默认原因月份要＋1
             calendar.setTime(sdf.parse(year + "-" + (month + 1) + "-" + day));
             //判断学期 判空
-            if(xueQi!=null) {
+            if (xueQi != null) {
                 if (Integer.parseInt(xueQi.getXq()) == 1) {
                     //上半学期开学时间
                     calendar1.setTime(sdf.parse(xueQi.getXnUp() + "-9-6"));
@@ -317,7 +326,7 @@ public class FragmentKC extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if(xueQi!=null) {
+        if (xueQi != null) {
             int startWeek = calendar1.get(Calendar.WEEK_OF_YEAR);
             int week = calendar.get(Calendar.WEEK_OF_YEAR);
             //是否是跨年
@@ -343,6 +352,9 @@ public class FragmentKC extends Fragment {
         }
         return Zs;
     }
+
+
+
 
     @Override
     public void onDestroyView() {

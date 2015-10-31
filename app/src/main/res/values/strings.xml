@@ -5,9 +5,9 @@
     <string name="drawer_close">close</string>
     <string name="draweropen">open</string>
     <string-array name="tab_array">
-        <item>新闻</item>
-        <item>课表</item>
-        <item>考试</item>
+        <item>个人中心</item>
+        <item>监考安排</item>
+        <item>注销登录</item>
     </string-array>
     <string name="login">登录</string>
     <string name="title">教师助手</string>
@@ -34,4 +34,6 @@
     <string name="weather_setting">天气设置 </string>
     <string name="search">查询</string>
     <string name="setting">设置</string>
+    <string name="person_info">我的资料</string>
+    <string name="test_array">监考安排</string>
 </resources>
