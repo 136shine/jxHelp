@@ -35,7 +35,7 @@ public class FragmentNews extends Fragment implements View.OnClickListener {
     HorizontalScrollView horizontal;
     @InjectView(R.id.news_viewpager)
     ViewPager newsViewpager;
-    public static int current;
+    public static int current=0;
     private int avarWidth;
     private List<Fragment> list = new ArrayList<Fragment>();
     private List<TextView> listTV = new ArrayList<TextView>();
@@ -96,7 +96,7 @@ public class FragmentNews extends Fragment implements View.OnClickListener {
 
         @Override
         public void onPageSelected(int position) {
-            if ((App.lgIsFirstLoad && position == 0) || (App.xyIsFirstLoad && position == 1)
+            if ((App.xyIsFirstLoad && position == 1)
                     || (App.mtIsFirstLoad && position == 2) || (App.xsIsFirstLoad && position == 3)
                     || (App.xxIsFirstLoad && position == 4) || (App.zbIsFirstLoad && position == 5)
                     || (App.zpIsFirstLoad && position == 6)) {

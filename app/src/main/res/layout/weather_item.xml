@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
     <TextView
-        android:textColor="@color/login_text"
+        android:textColor="@android:color/white"
         android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -15,7 +15,7 @@
         android:textSize="20sp" />
 
     <TextView
-        android:textColor="@color/login_text"
+        android:textColor="@android:color/white"
         android:id="@+id/weather"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -25,7 +25,7 @@
         android:textSize="20sp" />
 
     <TextView
-        android:textColor="@color/login_text"
+        android:textColor="@android:color/white"
         android:id="@+id/wind"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -48,7 +48,7 @@
             android:layout_weight="2"/>
 
         <TextView
-            android:textColor="@color/login_text"
+            android:textColor="@android:color/white"
             android:id="@+id/day_tv"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -74,7 +74,7 @@
             android:layout_height="match_parent" />
 
         <TextView
-            android:textColor="@color/login_text"
+            android:textColor="@android:color/white"
             android:layout_weight="1"
             android:id="@+id/night_tv"
             android:layout_width="0dp"

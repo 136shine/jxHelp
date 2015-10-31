@@ -11,7 +11,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.jxthelp.R;
-import com.jxthelp.bean.News;
 import com.jxthelp.dialog.MyDialog;
 import com.jxthelp.request.NewsRequest;
 import com.jxthelp.swipeback.SwipeBackActivity;
@@ -43,6 +42,8 @@ public class WebView extends SwipeBackActivity implements View.OnClickListener {
     TextView webFb;
     @InjectView(R.id.web_data)
     TextView webData;
+    @InjectView(R.id.share)
+    ImageButton share;
     private String mUrl;
     private static Elements elements1;
     private static Element element;
@@ -64,61 +65,62 @@ public class WebView extends SwipeBackActivity implements View.OnClickListener {
             case 0:
                 mUrl = NewsRequest.LGNewsList.get(i).getUrl();
                 webTitle.setText("理工新闻");
-                NewsTitle=NewsRequest.LGNewsList.get(i).getTitle();
+                NewsTitle = NewsRequest.LGNewsList.get(i).getTitle();
                 newsTitle.setText(NewsTitle);
                 webFb.setText(NewsRequest.LGNewsList.get(i).getFb());
-                webData.setText("日期："+NewsRequest.LGNewsList.get(i).getDate());
+                webData.setText("日期：" + NewsRequest.LGNewsList.get(i).getDate());
                 break;
             case 1:
                 mUrl = NewsRequest.XYNewsList.get(i).getUrl();
                 webTitle.setText("校园传真");
-                NewsTitle=NewsRequest.XYNewsList.get(i).getTitle();
+                NewsTitle = NewsRequest.XYNewsList.get(i).getTitle();
                 newsTitle.setText(NewsTitle);
                 webFb.setText(NewsRequest.XYNewsList.get(i).getFb());
-                webData.setText("日期："+NewsRequest.XYNewsList.get(i).getDate());
+                webData.setText("日期：" + NewsRequest.XYNewsList.get(i).getDate());
                 break;
             case 2:
                 mUrl = NewsRequest.MTNewsList.get(i).getUrl();
                 webTitle.setText("媒体聚焦");
-                NewsTitle=NewsRequest.MTNewsList.get(i).getTitle();
+                NewsTitle = NewsRequest.MTNewsList.get(i).getTitle();
                 newsTitle.setText(NewsTitle);
                 webFb.setText(NewsRequest.MTNewsList.get(i).getFb());
-                webData.setText("日期："+NewsRequest.MTNewsList.get(i).getDate());
+                webData.setText("日期：" + NewsRequest.MTNewsList.get(i).getDate());
                 break;
             case 3:
                 mUrl = NewsRequest.XSNewsList.get(i).getUrl();
                 webTitle.setText("学术公告");
-                NewsTitle=NewsRequest.XSNewsList.get(i).getTitle();
+                NewsTitle = NewsRequest.XSNewsList.get(i).getTitle();
                 newsTitle.setText(NewsTitle);
                 webFb.setText(NewsRequest.XSNewsList.get(i).getFb());
-                webData.setText("日期："+NewsRequest.XSNewsList.get(i).getDate());
+                webData.setText("日期：" + NewsRequest.XSNewsList.get(i).getDate());
                 break;
             case 4:
                 mUrl = NewsRequest.XXNewsList.get(i).getUrl();
                 webTitle.setText("学校公告");
-                NewsTitle=NewsRequest.XXNewsList.get(i).getTitle();
+                NewsTitle = NewsRequest.XXNewsList.get(i).getTitle();
                 newsTitle.setText(NewsTitle);
                 webFb.setText(NewsRequest.XXNewsList.get(i).getFb());
-                webData.setText("日期："+NewsRequest.XXNewsList.get(i).getDate());
+                webData.setText("日期：" + NewsRequest.XXNewsList.get(i).getDate());
                 break;
             case 5:
                 mUrl = NewsRequest.ZBNewsList.get(i).getUrl();
                 webTitle.setText("招标公告");
-                NewsTitle=NewsRequest.ZBNewsList.get(i).getTitle();
+                NewsTitle = NewsRequest.ZBNewsList.get(i).getTitle();
                 newsTitle.setText(NewsTitle);
                 webFb.setText(NewsRequest.ZBNewsList.get(i).getFb());
-                webData.setText("日期："+NewsRequest.ZBNewsList.get(i).getDate());
+                webData.setText("日期：" + NewsRequest.ZBNewsList.get(i).getDate());
                 break;
             case 6:
                 mUrl = NewsRequest.ZPNewsList.get(i).getUrl();
                 webTitle.setText("校园招聘");
-                NewsTitle=NewsRequest.ZPNewsList.get(i).getTitle();
+                NewsTitle = NewsRequest.ZPNewsList.get(i).getTitle();
                 newsTitle.setText(NewsTitle);
                 webFb.setText(NewsRequest.ZPNewsList.get(i).getFb());
-                webData.setText("日期："+NewsRequest.ZPNewsList.get(i).getDate());
+                webData.setText("日期：" + NewsRequest.ZPNewsList.get(i).getDate());
                 break;
 
         }
+        share.setOnClickListener(this);
         webBack.setOnClickListener(this);
         StringRequest mStringRequest = new StringRequest("http://www.jxust.cn" + mUrl, new Response.Listener<String>() {
             //            String text;
@@ -163,6 +165,16 @@ public class WebView extends SwipeBackActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        finish();
+        switch (v.getId()){
+            case R.id.web_back:finish();break;
+            case R.id.share:
+                Intent intent=new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+//                intent.putExtra(Intent.EXTRA_STREAM,"http://www.jxust.cn"+mUrl);
+                intent.putExtra(Intent.EXTRA_SUBJECT,"Share");
+                intent.putExtra(Intent.EXTRA_TEXT,NewsTitle+"\n"+"http://www.jxust.cn"+mUrl);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(Intent.createChooser(intent,"分享"));
+        }
     }
 }

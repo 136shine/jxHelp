@@ -86,7 +86,6 @@ public class FragmentWeather extends Fragment implements View.OnClickListener {
         getData();
         weatherAdapter = new WeatherAdapter();
         listView.setAdapter(weatherAdapter);
-        listView.setEnabled(false);
         pd = new MyDialog(getActivity());
         pd.setCanceledOnTouchOutside(false);
         pd.show();
