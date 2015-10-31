@@ -78,13 +78,13 @@ public class FragmentKC extends Fragment {
     private int height;
     private int zhouShu;
     private String[] zhou = new String[25];
-    private XueQi xueQi = LoginActivity.xueQi;
+    private XueQi xueQi = MainActivity.xueQi;
     private Context mContext = App.getContext();
 
     private List<CourseInfo> list;
 
     public FragmentKC() {
-        list = LoginActivity.listCourse;
+        list = MainActivity.listCourse;
     }
 
     @Nullable

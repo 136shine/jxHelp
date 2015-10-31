@@ -99,7 +99,8 @@ public class FragmentLGNews extends Fragment implements SwipeRefreshLayout.OnRef
                 , R.color.holo_orange_light, R.color.holo_purple, R.color.holo_red_dark);
         swipe.setOnRefreshListener(this);
         System.out.println("lg:"+App.lgIsFirstLoad);
-        if (App.lgIsFirstLoad){
+        if (FragmentNews.current==0&&App.lgIsFirstLoad){
+            System.out.println("adddddd");
             pd=new MyDialog(getActivity());
             pd.setCanceledOnTouchOutside(false);
             pd.show();
