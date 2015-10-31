@@ -158,7 +158,7 @@ public class LoginActivity extends BaseActivity {
         } else {
             org.jsoup.nodes.Document doc = Jsoup.parse(temp);
             Element element = doc.select("input[name=__VIEWSTATE]").first();
-            if(!element.text().toString().isEmpty()) {
+            if(element.hasAttr("value")) {
                 __VIEWSTATE = element.attr("value");
                 System.out.println("__VIEWSTATE-----------" + __VIEWSTATE);
             }
@@ -178,16 +178,26 @@ public class LoginActivity extends BaseActivity {
             HttpUtils.postHttp(GetUrl.Url1, App.getHttpClient(), new ArrayList<BasicNameValuePair>(), "");
             mCookieStore = App.getHttpClient().getCookieStore();
             List<Cookie> cookies = mCookieStore.getCookies();
+            StringBuffer sb = new StringBuffer();
             for (int i = 0; i < cookies.size(); i++) {
                 Cookie cookie = cookies.get(i);
+                Log.d("Cookie", cookies.get(i).getName() + "=" + cookies.get(i).getValue());
+//                cookieString= cookie.getName() + "=" + cookie.getValue() + "; domain=" + cookie.getDomain();
+//                    SharedPreferences.Editor editor=sp.edit();
+//                    editor.putString("cookie",cookieString);
+//                    editor.commit();
+                Log.d("Cookie","cookie string is " + cookieString);
+
                 String name = cookie.getName();
                 String value = cookie.getValue();
-                StringBuffer sb = new StringBuffer();
                 sb.append(name + "=" + value + ";");
-                App.editor = App.sp.edit();
-                App.editor.putString("Cookie", sb.toString());
-                App.editor.commit();
             }
+            cookieString=sb.toString();
+
+            System.out.println("cookie string is "+cookieString);
+            App.editor = App.sp.edit();
+            App.editor.putString("Cookie", cookieString);
+            App.editor.commit();
 
         } catch (IOException e) {
             e.printStackTrace();
