@@ -51,7 +51,6 @@ public class LoginActivity extends BaseActivity {
     private EditText username;
     private EditText password;
     private Button login;
-    private Button test;
     private String message;
 
     public static String user;
@@ -78,21 +77,12 @@ public class LoginActivity extends BaseActivity {
                 login(username.getText().toString().trim(), password.getText().toString().trim());
             }
         });
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     public void initView() {
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.login_bt);
-        test = (Button) findViewById(R.id.test);
     }
 
     public void login(final String username, final String password) {
@@ -153,12 +143,11 @@ public class LoginActivity extends BaseActivity {
 
     //获取post __VIEWSTATE的参数值
     private String getData() {
-        String __VIEWSTATE = "";
+        String __VIEWSTATE ="a";
         String temp = "";
 
         try {
             temp = HttpUtils.getHttp(GetUrl.Url1, App.getHttpClient(), "http://www.jxust.cn/", "");
-
         } catch (IOException e) {
             System.out.println("eee");
             e.printStackTrace();
@@ -169,9 +158,11 @@ public class LoginActivity extends BaseActivity {
         } else {
             org.jsoup.nodes.Document doc = Jsoup.parse(temp);
             Element element = doc.select("input[name=__VIEWSTATE]").first();
-            __VIEWSTATE = element.attr("value");
-            System.out.println("__VIEWSTATE-----------" + __VIEWSTATE);
-            return __VIEWSTATE;
+            if(!element.text().toString().isEmpty()) {
+                __VIEWSTATE = element.attr("value");
+                System.out.println("__VIEWSTATE-----------" + __VIEWSTATE);
+            }
+                return __VIEWSTATE;
         }
     }
 
@@ -210,9 +201,7 @@ public class LoginActivity extends BaseActivity {
         pairs.add(new BasicNameValuePair("lbLanguage", null));
 
         try {
-            System.out.println("22222222");
             info = HttpUtils.postHttp(GetUrl.Url1, App.getHttpClient(), pairs, cookieString);
-            System.out.println("info-------------" + info);
 
         } catch (IOException e) {
             e.printStackTrace();

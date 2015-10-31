@@ -18,5 +18,7 @@ public class GetUrl {
     public static String Url1 = "http://jw.jxust.cn/default2.aspx";
     public static String Url2="http://jw.jxust.cn/jstjkbcx.aspx?zgh=";
     public static String Url3 = "http://jw.jxust.cn/js_main.aspx?xh=";
+    public static String PersonUrl="http://jw.jxust.cn/js_grjl.aspx?zgh=";
+    public static String TestUrl="http://jw.jxust.cn/js_ksap.aspx?zgh=";
 }
 

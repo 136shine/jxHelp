@@ -30,6 +30,8 @@
         <activity android:name=".ui.CourseDetail"/>
         <activity android:name=".ui.WeatherTag"/>
         <activity android:name=".ui.WeatherSearch"/>
+        <activity android:name=".sliding.PersonalCenter"/>
+        <activity android:name=".sliding.Test"/>
     </application>
 
 </manifest>

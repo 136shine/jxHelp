@@ -100,7 +100,6 @@
     </RelativeLayout>
 
     <Button
-        android:textColor="@android:color/white"
         android:id="@+id/login_bt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -111,13 +110,7 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/login_bt"
         android:text="@string/login"
+        android:textColor="@android:color/white"
         android:textSize="25sp" />
-
-    <Button
-        android:id="@+id/test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="测试"
-        android:visibility="visible" />
 
 </RelativeLayout>

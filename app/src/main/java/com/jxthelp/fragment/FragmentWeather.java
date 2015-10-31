@@ -105,7 +105,6 @@ public class FragmentWeather extends Fragment implements View.OnClickListener {
         StringRequest mStringRequest = new StringRequest(GetUrl.WEATHERUrl1+CITY+GetUrl.WEATHERUrl2, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                System.out.println(s.toString());
                 Document doc = Jsoup.parse(s);
                 String error=doc.select("error").text().toString();
                 if(Integer.parseInt(error)==-3){
